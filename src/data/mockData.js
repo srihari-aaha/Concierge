@@ -798,7 +798,6 @@ export const INITIAL_NOTIFICATIONS = [
     role: 'guest',
     title: 'Booking Confirmed at Palm Grove Villa',
     message: 'Your stay from Oct 12 – 15, 2024 has been secured. Concierge services are ready to order.',
-    time: '2 days ago',
     read: false,
     link: '/guest/my-stay'
   },
@@ -808,7 +807,6 @@ export const INITIAL_NOTIFICATIONS = [
     role: 'guest',
     title: 'Chauffeur Assigned for Airport Transfer',
     message: 'Provider will receive you at MOPA Airport at 11:30 AM.',
-    time: '1 day ago',
     read: false,
     link: '/guest/requests'
   },
@@ -818,7 +816,6 @@ export const INITIAL_NOTIFICATIONS = [
     role: 'owner',
     title: 'New Concierge Request from Guest Priya',
     message: 'Guest requested Private Chef Experience for Oct 13 at Palm Grove Villa.',
-    time: 'Yesterday',
     read: false,
     link: '/owner/concierge'
   },
@@ -828,7 +825,6 @@ export const INITIAL_NOTIFICATIONS = [
     role: 'provider',
     title: 'New Job Assignment',
     message: 'You have been assigned Airport Transfer for Oct 12 at Palm Grove Villa.',
-    time: 'Yesterday',
     read: false,
     link: '/provider/dashboard'
   }
