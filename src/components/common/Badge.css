@@ -1,0 +1,105 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  line-height: 1;
+  white-space: nowrap;
+  gap: 0.35rem;
+  border: 1px solid transparent;
+}
+
+.badge-sm {
+  padding: 0.22rem 0.6rem;
+  font-size: 0.72rem;
+}
+
+.badge-md {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* Status variants */
+.badge-default {
+  background-color: var(--surface-subtle);
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+.badge-sage,
+.badge-brand {
+  background-color: var(--primary-tint);
+  color: var(--primary-dark);
+  border-color: rgba(237, 112, 20, 0.25);
+}
+
+.badge-gold,
+.badge-vip,
+.badge-luxury {
+  background-color: var(--accent-gold-tint);
+  color: var(--accent-gold-dark);
+  border-color: rgba(201, 162, 39, 0.3);
+}
+
+/* In Progress: #7C3AED */
+.badge-in_progress,
+.badge-in-progress,
+.badge-progress {
+  background-color: var(--status-in-progress-bg);
+  color: var(--status-in-progress);
+  border-color: rgba(124, 58, 237, 0.25);
+}
+
+/* Assigned: #2563EB */
+.badge-assigned {
+  background-color: var(--status-assigned-bg);
+  color: var(--status-assigned);
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+/* Completed / Confirmed: Green (#16A34A) */
+.badge-confirmed,
+.badge-completed,
+.badge-resolved {
+  background-color: var(--status-completed-bg);
+  color: var(--status-completed);
+  border-color: rgba(22, 163, 74, 0.25);
+}
+
+/* Pending: #0F766E */
+.badge-pending,
+.badge-requested {
+  background-color: var(--status-pending-bg);
+  color: var(--status-pending);
+  border-color: rgba(15, 118, 110, 0.25);
+}
+
+/* Canceled / Urgent: #DC2626 */
+.badge-canceled,
+.badge-cancelled,
+.badge-urgent {
+  background-color: var(--status-canceled-bg);
+  color: var(--status-canceled);
+  border-color: rgba(220, 38, 38, 0.25);
+}
+
+/* Unassigned: #6B7280 */
+.badge-unassigned {
+  background-color: var(--status-unassigned-bg);
+  color: var(--status-unassigned);
+  border-color: rgba(107, 114, 128, 0.25);
+}
+
+.badge-accent {
+  background-color: var(--primary-tint);
+  color: var(--primary-dark);
+  border-color: rgba(237, 112, 20, 0.25);
+}

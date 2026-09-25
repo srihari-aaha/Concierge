@@ -1,0 +1,232 @@
+.provider-dash-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* Stats Banner */
+.provider-stats-banner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.provider-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.p-stat-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+}
+
+.p-stat-val {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.p-stat-val.highlight {
+  color: var(--primary-dark);
+}
+
+/* Tabs */
+.provider-tabs-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.p-tab-btn {
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-full);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.p-tab-btn:hover {
+  background-color: var(--surface-warm);
+}
+
+.p-tab-btn.active {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
+}
+
+/* Jobs Feed */
+.provider-jobs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.provider-job-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-card);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.job-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.job-type-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+
+.job-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.job-payout-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background-color: var(--surface-warm);
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+.payout-lbl {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.payout-val {
+  font-size: 1.15rem;
+  color: var(--primary-dark);
+}
+
+.job-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  background-color: var(--surface-warm);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.25rem;
+}
+
+.job-meta-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.meta-k {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-light);
+}
+
+.meta-v {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.meta-icon {
+  color: var(--primary);
+}
+
+.meta-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.job-instructions-card {
+  background-color: #FFFFFF;
+  border-left: 3px solid var(--accent);
+  padding: 0.85rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.instructions-lbl {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 0.25rem;
+}
+
+.instructions-body {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.job-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border-light);
+}
+
+.job-complete-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--status-confirmed);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.provider-empty-state {
+  background-color: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-card);
+  padding: 3.5rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .provider-stats-banner {
+    grid-template-columns: 1fr 1fr;
+  }
+  .job-meta-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}

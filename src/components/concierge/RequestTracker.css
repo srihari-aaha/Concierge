@@ -1,0 +1,117 @@
+.request-tracker-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tracker-top-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tracker-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.tracker-category-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.tracker-service-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+.tracker-stay-info {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.tracker-status-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.tracker-price {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.tracker-timeline-wrap {
+  background-color: var(--surface-warm);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1rem;
+  border: 1px solid var(--border-light);
+}
+
+.tracker-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.meta-box {
+  background-color: var(--surface-warm);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.meta-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-light);
+}
+
+.provider-info-line, .provider-phone-line {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.meta-icon {
+  color: var(--primary);
+}
+
+.meta-text {
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.tracker-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border-light);
+}
+
+@media (max-width: 640px) {
+  .tracker-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}

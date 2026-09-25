@@ -1,0 +1,126 @@
+.role-switcher-banner {
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+  font-size: 0.785rem;
+  border-bottom: 1px solid #2B2B2B;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.role-switcher-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0.4rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.role-switcher-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.role-switcher-tag {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-xs);
+}
+
+.role-switcher-desc {
+  color: #9E9E9E;
+  font-size: 0.775rem;
+}
+
+.role-switcher-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding: 0.1rem 0;
+}
+
+.role-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #D4D4D4;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.76rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.role-btn:hover {
+  background-color: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+}
+
+.role-btn.active {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
+  box-shadow: 0 2px 6px rgba(237, 112, 20, 0.35);
+}
+
+.role-btn-title {
+  font-weight: 600;
+}
+
+.role-btn-name {
+  opacity: 0.85;
+  font-size: 0.72rem;
+}
+
+.role-pill-badge {
+  background-color: var(--accent-gold);
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radius-full);
+  line-height: 1.1;
+}
+
+.role-switcher-right {
+  display: flex;
+  align-items: center;
+}
+
+.role-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  color: #9E9E9E;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.725rem;
+  transition: all var(--transition-fast);
+}
+
+.role-reset-btn:hover {
+  color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 900px) {
+  .role-switcher-desc {
+    display: none;
+  }
+}
