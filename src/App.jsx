@@ -48,8 +48,9 @@ import ProviderSchedulePage from './pages/provider/ProviderSchedulePage';
 import ProviderEarningsPage from './pages/provider/ProviderEarningsPage';
 import ProviderProfilePage from './pages/provider/ProviderProfilePage';
 
-// Admin Page
+// Admin Pages
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import AdminProfilePage from './pages/admin/AdminProfilePage';
 
 // Cross-role Messages Page
 import MessagesPage from './pages/common/MessagesPage';
@@ -366,6 +367,14 @@ function MainApp() {
           element={
             <ProtectedRoute allowedRole="admin">
               <AdminDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/profile"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminProfilePage />
             </ProtectedRoute>
           }
         />

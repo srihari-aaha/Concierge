@@ -11,7 +11,7 @@ export const LOGIN_CREDENTIALS = [
     id: 'guest',
     role: 'guest',
     label: 'Guest / Traveler',
-    name: 'Priya Sharma',
+    name: 'Guest',
     email: 'guest',
     altEmail: 'priya.sharma@example.com',
     password: '123456',
@@ -119,10 +119,10 @@ export default function AuthPage() {
         selectedRole === 'owner'
           ? '/owner/dashboard'
           : selectedRole === 'provider'
-          ? '/provider/dashboard'
-          : selectedRole === 'admin'
-          ? '/admin/dashboard'
-          : '/';
+            ? '/provider/dashboard'
+            : selectedRole === 'admin'
+              ? '/admin/dashboard'
+              : '/';
       navigate(dest);
       return;
     }
@@ -257,7 +257,7 @@ export default function AuthPage() {
                   <input
                     type="text"
                     className="auth-input"
-                    placeholder="e.g. Priya Sharma"
+                    placeholder="e.g. Guest"
                     value={fullName}
                     autoComplete="off"
                     onChange={(e) => setFullName(e.target.value)}

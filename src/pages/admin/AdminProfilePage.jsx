@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
-import { User, Mail, Phone, MapPin, ShieldCheck, Heart, Bell, CreditCard, Save } from 'lucide-react';
+import { ShieldCheck, Mail, Phone, MapPin, Key, Bell, Save, Lock, AlertTriangle } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 
-export default function GuestProfilePage() {
+export default function AdminProfilePage() {
   const { currentUser, showToast } = useApp();
 
   const [formData, setFormData] = useState({
-    
-    email: currentUser?.email || 'priya.sharma@example.com',
-    phone: currentUser?.phone || '+91 98201 55678',
-    city: currentUser?.city || 'Bengaluru, Karnataka',
-    emergencyContact: 'Amit Sharma (+91 98201 99881)',
-    dietary: 'Vegetarian (No eggs / Jain friendly)',
-    pillowPreference: 'Feather soft / Lavender aromatherapy',
-    smsNotifications: true,
-    whatsappUpdates: true,
-    upiId: 'priya.sharma@okaxis'
+    name: currentUser?.name || 'Ananya Deshmukh',
+    email: currentUser?.email || 'admin@stayease.in',
+    phone: currentUser?.phone || '+91 98190 00122',
+    city: currentUser?.city || 'Mumbai',
+    department: 'Trust, Safety & Platform Integrity',
+    roleTitle: 'Lead Operations Administrator',
+    twoFactorEnabled: true,
+    notifyOnNewProperty: true,
+    notifyOnHighValueBooking: true,
+    notifyOnEmergencyMaintenance: true,
+    emergencyPhone: '+91 98190 99443'
   });
 
   const handleChange = (e) => {
@@ -31,13 +32,13 @@ export default function GuestProfilePage() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    showToast('Your traveler profile preferences have been updated.', 'success');
+    showToast('Platform Administrator profile and security settings updated.', 'success');
   };
 
   return (
     <DashboardLayout
-      title="Guest Profile & Preferences"
-      subtitle="Manage your personal information, concierge preferences, and verified verification credentials"
+      title="Admin Profile & Security"
+      subtitle="Manage your administrative credentials, security clearance, and platform dispatch notifications"
     >
       <div style={{ maxWidth: '840px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
         {/* Verification banner */}
@@ -54,40 +55,36 @@ export default function GuestProfilePage() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div
+            <img
+              src={currentUser?.avatar}
+              alt={formData.name}
               style={{
-                width: '52px',
-                height: '52px',
+                width: '54px',
+                height: '54px',
                 borderRadius: '50%',
-                background: 'var(--color-primary)',
-                color: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '1.25rem',
-                fontWeight: 700
+                objectFit: 'cover',
+                border: '2px solid #ffffff',
+                boxShadow: 'var(--shadow-xs)'
               }}
-            >
-              PS
-            </div>
+            />
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>
                   {formData.name}
                 </h3>
-                <Badge variant="sage" size="sm">
-                  <ShieldCheck size={12} style={{ marginRight: '4px', color: 'green' }} />
-                  <span style={{ color: 'green' }}>Aadhaar Verified</span>
+                <Badge variant="terracotta" size="sm">
+                  <ShieldCheck size={12} style={{ marginRight: '4px' }} />
+                  Super Administrator
                 </Badge>
               </div>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                StayEase Verified Traveler • Member since October 2024
+                {formData.roleTitle} • {formData.department}
               </p>
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <span style={{ fontSize: '0.8rem', color: 'var(--color-primary-dark)', fontWeight: 600 }}>
-              Trust Score: 100%
+              Access Level: Tier-1
             </span>
           </div>
         </div>
@@ -107,13 +104,13 @@ export default function GuestProfilePage() {
           }}
         >
           <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', color: 'var(--text)' }}>
-            Personal Contact Information
+            Admin Identity & Contact
           </h4>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                Full Name
+                Admin Full Name
               </label>
               <input
                 type="text"
@@ -133,7 +130,7 @@ export default function GuestProfilePage() {
 
             <div>
               <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                Email Address
+                Official StayEase Email
               </label>
               <input
                 type="email"
@@ -153,7 +150,7 @@ export default function GuestProfilePage() {
 
             <div>
               <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                Primary Mobile (WhatsApp enabled)
+                Direct Phone
               </label>
               <input
                 type="tel"
@@ -173,7 +170,7 @@ export default function GuestProfilePage() {
 
             <div>
               <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                Home City & State
+                HQ Location / City
               </label>
               <input
                 type="text"
@@ -191,98 +188,82 @@ export default function GuestProfilePage() {
             </div>
           </div>
 
-          <div style={{ marginTop: '0.5rem' }}>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-              Emergency Contact Name & Number
-            </label>
-            <input
-              type="text"
-              name="emergencyContact"
-              value={formData.emergencyContact}
-              onChange={handleChange}
+          <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)', margin: '0.5rem 0' }} />
+
+          <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', color: 'var(--text)' }}>
+            Security & Clearance Credentials
+          </h4>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <label
               style={{
-                width: '100%',
-                padding: '0.65rem 0.85rem',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-md)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                cursor: 'pointer',
                 fontSize: '0.9rem'
               }}
-            />
+            >
+              <input
+                type="checkbox"
+                name="twoFactorEnabled"
+                checked={formData.twoFactorEnabled}
+                onChange={handleChange}
+                style={{ width: '16px', height: '16px', accentColor: 'var(--primary)' }}
+              />
+              <span>
+                <strong>Require Hardware 2-Factor Authentication (FIDO2 / U2F)</strong>
+                <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  Enforce hardware security key verification for all moderation actions and ledger refunds
+                </span>
+              </span>
+            </label>
           </div>
 
           <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)', margin: '0.5rem 0' }} />
 
           <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', color: 'var(--text)' }}>
-            Hospitality & Concierge Preferences
+            System Dispatch Alerts
           </h4>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                Dietary & Dining Needs
-              </label>
-              <input
-                type="text"
-                name="dietary"
-                value={formData.dietary}
-                onChange={handleChange}
-                placeholder="e.g. Pure Vegetarian, Gluten-free, Jain"
-                style={{
-                  width: '100%',
-                  padding: '0.65rem 0.85rem',
-                  border: '1px solid var(--border)',
-                  borderRadius: 'var(--radius-md)',
-                  fontSize: '0.9rem'
-                }}
-              />
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                Default Payment UPI VPA
-              </label>
-              <input
-                type="text"
-                name="upiId"
-                value={formData.upiId}
-                onChange={handleChange}
-                placeholder="name@okaxis"
-                style={{
-                  width: '100%',
-                  padding: '0.65rem 0.85rem',
-                  border: '1px solid var(--border)',
-                  borderRadius: 'var(--radius-md)',
-                  fontSize: '0.9rem'
-                }}
-              />
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', fontSize: '0.9rem', cursor: 'pointer' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.9rem' }}>
               <input
                 type="checkbox"
-                name="whatsappUpdates"
-                checked={formData.whatsappUpdates}
+                name="notifyOnNewProperty"
+                checked={formData.notifyOnNewProperty}
                 onChange={handleChange}
+                style={{ width: '16px', height: '16px', accentColor: 'var(--primary)' }}
               />
-              <span>Send door codes, driver live tracking, and concierge updates to WhatsApp</span>
+              <span>Send push alert on new host property submission awaiting vetting</span>
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', fontSize: '0.9rem', cursor: 'pointer' }}>
+
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.9rem' }}>
               <input
                 type="checkbox"
-                name="smsNotifications"
-                checked={formData.smsNotifications}
+                name="notifyOnHighValueBooking"
+                checked={formData.notifyOnHighValueBooking}
                 onChange={handleChange}
+                style={{ width: '16px', height: '16px', accentColor: 'var(--primary)' }}
               />
-              <span>Receive instant SMS emergency alerts & check-in OTPs</span>
+              <span>Alert when a booking transaction exceeds ₹50,000 INR</span>
+            </label>
+
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.9rem' }}>
+              <input
+                type="checkbox"
+                name="notifyOnEmergencyMaintenance"
+                checked={formData.notifyOnEmergencyMaintenance}
+                onChange={handleChange}
+                style={{ width: '16px', height: '16px', accentColor: 'var(--primary)' }}
+              />
+              <span>Immediate SMS alert on critical / emergency guest maintenance escalations</span>
             </label>
           </div>
 
-          <div style={{ marginTop: '1rem' }}>
-            <Button variant="primary" type="submit">
-              <Save size={16} />
-              Save Traveler Profile
+          <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
+            <Button type="submit" variant="primary" icon={<Save size={16} />}>
+              Save Administrator Profile
             </Button>
           </div>
         </form>

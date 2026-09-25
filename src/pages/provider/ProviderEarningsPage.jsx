@@ -5,9 +5,9 @@ import Button from '../../components/common/Button';
 
 export default function ProviderEarningsPage() {
   const payouts = [
-    { id: 'PAY-1082', date: 'Sep 20, 2026', desc: '4x Airport Transfers & Villa Maintenance', amount: 9600, status: 'Settled to HDFC Bank' },
-    { id: 'PAY-1075', date: 'Sep 13, 2026', desc: 'Chauffeur Fleet & AC Servicing (Goa)', amount: 14200, status: 'Settled to HDFC Bank' },
-    { id: 'PAY-1068', date: 'Sep 06, 2026', desc: 'Emergency Plumbing & Transfers', amount: 8400, status: 'Settled to HDFC Bank' }
+    { id: 'PAY-1082', date: 'Sep 20, 2024', desc: '4x Airport Transfers & Villa Maintenance', amount: 9600, status: 'Settled to HDFC Bank' },
+    { id: 'PAY-1075', date: 'Sep 13, 2024', desc: 'Chauffeur Fleet & AC Servicing (Goa)', amount: 14200, status: 'Settled to HDFC Bank' },
+    { id: 'PAY-1068', date: 'Sep 06, 2024', desc: 'Emergency Plumbing & Transfers', amount: 8400, status: 'Settled to HDFC Bank' }
   ];
 
   return (

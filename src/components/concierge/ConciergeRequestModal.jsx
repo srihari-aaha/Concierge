@@ -15,7 +15,7 @@ export default function ConciergeRequestModal({
 }) {
   const { createConciergeRequest, bookings } = useApp();
 
-  const [date, setDate] = useState('2026-10-13');
+  const [date, setDate] = useState('2024-10-13');
   const [timeSlot, setTimeSlot] = useState('11:00 AM');
   const [guestNotes, setGuestNotes] = useState('');
   const [selectedBookingId, setSelectedBookingId] = useState(() => {
@@ -36,7 +36,7 @@ export default function ConciergeRequestModal({
       setIsSubmitting(false);
       const req = createConciergeRequest({
         bookingId: currentBooking ? currentBooking.id : 'booking-1',
-        bookingRef: currentBooking ? currentBooking.reference : 'SE-2026-8942',
+        bookingRef: currentBooking ? currentBooking.reference : 'SE-2024-8942',
         propertyId: property ? property.id : currentBooking ? currentBooking.propertyId : 'prop-1',
         propertyName: property ? property.name : currentBooking ? currentBooking.propertyName : 'Palm Grove Villa',
         serviceId: service.id,
@@ -161,6 +161,7 @@ export default function ConciergeRequestModal({
                   type="date"
                   className="field-input"
                   value={date}
+                  min="2024-01-01"
                   onChange={(e) => setDate(e.target.value)}
                   required
                 />

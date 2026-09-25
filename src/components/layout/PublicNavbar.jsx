@@ -50,7 +50,7 @@ export default function PublicNavbar() {
 
   // Unauthenticated links
   const unauthenticatedLinks = [
-    { label: 'Stays', path: '/explore' },
+    { label: 'Explore Stays', path: '/explore' },
     { label: 'Concierge', path: '/concierge' },
     { label: 'How It Works', path: '/how-it-works' },
     { label: 'About', path: '/about' }
@@ -58,7 +58,7 @@ export default function PublicNavbar() {
 
   // Authenticated Guest links
   const guestLinks = [
-    { label: 'Stays', path: '/explore' },
+    { label: 'Explore Stays', path: '/explore' },
     { label: 'Concierge', path: '/concierge' },
     { label: 'My Stay', path: '/guest/stay' },
     { label: 'How It Works', path: '/how-it-works' }

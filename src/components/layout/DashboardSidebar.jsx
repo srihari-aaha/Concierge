@@ -16,7 +16,8 @@ import {
   ShieldCheck,
   ArrowLeft,
   Briefcase,
-  LogOut
+  LogOut,
+  User
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import Badge from '../common/Badge';
@@ -26,15 +27,31 @@ export default function DashboardSidebar() {
   const { currentRole, currentUser, stats, logout } = useApp();
   const navigate = useNavigate();
 
+  const getProfilePath = () => {
+    switch (currentRole) {
+      case 'owner':
+        return '/owner/profile';
+      case 'provider':
+        return '/provider/profile';
+      case 'admin':
+        return '/admin/profile';
+      default:
+        return '/guest/profile';
+    }
+  };
+
+  const profilePath = getProfilePath();
+
   const guestNav = [
     { label: 'Overview', path: '/guest/dashboard', icon: LayoutDashboard },
     { label: 'My Current Stay', path: '/guest/my-stay', icon: Palmtree },
     { label: 'My Bookings', path: '/guest/bookings', icon: CalendarCheck },
-    { label: 'Concierge Requests', path: '/guest/requests', icon: ClipboardList, badge: stats.guestActiveRequests },
-    { label: 'Explore Stays', path: '/explore', icon: Compass },
     { label: 'Concierge Menu', path: '/concierge', icon: Sparkles },
+    { label: 'Concierge Requests', path: '/guest/requests', icon: ClipboardList, badge: stats.guestActiveRequests },
     { label: 'Report Maintenance', path: '/guest/maintenance', icon: Wrench },
-    { label: 'Messages', path: '/guest/messages', icon: MessageSquare }
+    { label: 'Messages', path: '/guest/messages', icon: MessageSquare },
+    { label: 'Profile', path: '/guest/profile', icon: User },
+    { label: 'Explore Stays', path: '/explore', icon: Compass },
   ];
 
   const ownerNav = [
@@ -45,14 +62,16 @@ export default function DashboardSidebar() {
     { label: 'Maintenance', path: '/owner/maintenance', icon: Wrench, badge: stats.ownerOpenMaintenance },
     { label: 'Service Providers', path: '/owner/providers', icon: Users },
     { label: 'Earnings & Payouts', path: '/owner/earnings', icon: DollarSign },
-    { label: 'Messages', path: '/owner/messages', icon: MessageSquare }
+    { label: 'Messages', path: '/owner/messages', icon: MessageSquare },
+    { label: 'Profile', path: '/owner/profile', icon: User }
   ];
 
   const providerNav = [
     { label: 'Active Jobs & Queue', path: '/provider/dashboard', icon: Briefcase, badge: stats.providerActiveJobs, badgeVariant: 'urgent' },
     { label: 'Weekly Schedule', path: '/provider/schedule', icon: CalendarCheck },
     { label: 'Earnings & Payouts', path: '/provider/earnings', icon: DollarSign },
-    { label: 'Messages', path: '/provider/messages', icon: MessageSquare }
+    { label: 'Messages', path: '/provider/messages', icon: MessageSquare },
+    { label: 'Profile', path: '/provider/profile', icon: User }
   ];
 
   const adminNav = [
@@ -62,7 +81,8 @@ export default function DashboardSidebar() {
     { label: 'Concierge Operations', path: '/admin/concierge', icon: Sparkles },
     { label: 'Provider Network', path: '/admin/providers', icon: Users },
     { label: 'Maintenance Log', path: '/admin/maintenance', icon: Wrench },
-    { label: 'System Reports', path: '/admin/reports', icon: ShieldCheck }
+    { label: 'System Reports', path: '/admin/reports', icon: ShieldCheck },
+    { label: 'Profile', path: '/admin/profile', icon: User }
   ];
 
   const getNavItems = () => {
@@ -97,13 +117,13 @@ export default function DashboardSidebar() {
       </div>
 
       {/* User profile card */}
-      <div className="sidebar-user-card">
+      <Link to={profilePath} className="sidebar-user-card" title="View Profile">
         <img src={currentUser.avatar} alt={currentUser.name} className="sidebar-user-avatar" />
         <div className="sidebar-user-info">
           <div className="sidebar-user-name">{currentUser.name}</div>
           <div className="sidebar-user-role">{currentUser.city || currentUser.company || 'India'}</div>
         </div>
-      </div>
+      </Link>
 
       {/* Navigation Links */}
       <nav className="sidebar-nav">

@@ -32,7 +32,7 @@ export default function DemoCenterPage() {
       role: 'guest',
 
       tag: 'Bengaluru Traveler',
-      desc: 'Guest with active upcoming reservation STY-2026-00124 at Palm Grove Retreat, Candolim Goa.',
+      desc: 'Guest with active upcoming reservation STY-2024-00124 at Palm Grove Retreat, Candolim Goa.',
       icon: User,
       badge: 'Guest Role',
       defaultPath: '/guest/dashboard',

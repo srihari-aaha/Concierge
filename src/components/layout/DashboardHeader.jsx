@@ -15,6 +15,21 @@ export default function DashboardHeader({ title, subtitle, onToggleMobileNav }) 
   );
   const unreadCount = userNotifs.filter((n) => !n.read).length;
 
+  const getProfilePath = () => {
+    switch (currentRole) {
+      case 'owner':
+        return '/owner/profile';
+      case 'provider':
+        return '/provider/profile';
+      case 'admin':
+        return '/admin/profile';
+      default:
+        return '/guest/profile';
+    }
+  };
+
+  const profilePath = getProfilePath();
+
   return (
     <header className="dashboard-header">
       <div className="dashboard-header-left">
@@ -98,13 +113,13 @@ export default function DashboardHeader({ title, subtitle, onToggleMobileNav }) 
         </div>
 
         {/* User Mini Profile */}
-        <div className="header-profile">
+        <Link to={profilePath} className="header-profile" title="View Profile">
           <img src={currentUser.avatar} alt={currentUser.name} className="header-avatar" />
           <div className="header-profile-text">
             <span className="header-user-name">{currentUser.name}</span>
             <span className="header-user-role">{currentRole.toUpperCase()}</span>
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   );

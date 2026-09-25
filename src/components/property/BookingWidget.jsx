@@ -12,8 +12,8 @@ export default function BookingWidget({ property }) {
   const { createBooking } = useApp();
 
   // Booking parameters
-  const [checkIn, setCheckIn] = useState('2026-11-10');
-  const [checkOut, setCheckOut] = useState('2026-11-13');
+  const [checkIn, setCheckIn] = useState('2024-11-10');
+  const [checkOut, setCheckOut] = useState('2024-11-13');
   const [guestsCount, setGuestsCount] = useState(2);
 
   // Concierge add-ons during reservation
@@ -43,7 +43,7 @@ export default function BookingWidget({ property }) {
   const baseRate = property.pricePerNight * nights;
   const cleaningFee = 2500;
   const serviceFee = Math.round(baseRate * 0.06); // 6% StayEase concierge & platform fee
-  
+
   // Add-on fees
   let addonFees = 0;
   if (selectedAddons.airportTransfer) addonFees += 2400;
@@ -87,7 +87,7 @@ export default function BookingWidget({ property }) {
 
   const handleFinishAndGoToStay = () => {
     setCheckoutModalOpen(false);
-    navigate('/guest/my-stay');
+    navigate('/guest/bookings');
   };
 
   return (
@@ -110,7 +110,7 @@ export default function BookingWidget({ property }) {
           onClick={() => {
             const el = document.getElementById('booking-checkin-date');
             if (el && el.showPicker) {
-              try { el.showPicker(); } catch (_) {}
+              try { el.showPicker(); } catch (_) { }
             }
           }}
         >
@@ -120,7 +120,7 @@ export default function BookingWidget({ property }) {
               id="booking-checkin-date"
               type="date"
               value={checkIn}
-              min={new Date().toISOString().split('T')[0]}
+              min="2024-01-01"
               onChange={(e) => setCheckIn(e.target.value)}
               className="booking-native-date"
             />
@@ -132,7 +132,7 @@ export default function BookingWidget({ property }) {
           onClick={() => {
             const el = document.getElementById('booking-checkout-date');
             if (el && el.showPicker) {
-              try { el.showPicker(); } catch (_) {}
+              try { el.showPicker(); } catch (_) { }
             }
           }}
         >
@@ -142,7 +142,7 @@ export default function BookingWidget({ property }) {
               id="booking-checkout-date"
               type="date"
               value={checkOut}
-              min={checkIn || new Date().toISOString().split('T')[0]}
+              min={checkIn || '2024-01-01'}
               onChange={(e) => setCheckOut(e.target.value)}
               className="booking-native-date"
             />

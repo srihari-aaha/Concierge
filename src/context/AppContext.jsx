@@ -13,7 +13,7 @@ import {
 
 const AppContext = createContext(null);
 
-const STORAGE_KEY = 'stayease_prototype_state_v1';
+const STORAGE_KEY = 'stayease_prototype_state_v2';
 
 export function AppProvider({ children }) {
   // Current active role
@@ -106,7 +106,7 @@ export function AppProvider({ children }) {
   const usersByRole = {
     guest: {
       id: 'guest-1',
-      name: 'Priya Sharma',
+      name: 'Guest',
       role: 'guest',
       email: 'guest@stayease.in',
       altEmail: 'priya.sharma@example.com',
@@ -187,7 +187,7 @@ export function AppProvider({ children }) {
 
   // State actions
   const createBooking = (bookingData) => {
-    const newRef = `STY-2026-${String(Math.floor(100 + Math.random() * 900)).padStart(5, '0')}`;
+    const newRef = `STY-2024-${String(Math.floor(100 + Math.random() * 900)).padStart(5, '0')}`;
     const newBooking = {
       id: `booking-${Date.now()}`,
       reference: newRef,
@@ -198,7 +198,7 @@ export function AppProvider({ children }) {
       status: 'confirmed',
       paymentDate: new Date().toISOString().split('T')[0],
       wifiName: 'PalmGrove_HighSpeed_5G',
-      wifiPass: 'ashwem2026',
+      wifiPass: 'ashwem2024',
       doorCode: `${Math.floor(1000 + Math.random() * 9000)}`,
       emergencyContact: '+91 98221 00999 (StayEase Rapid Response)',
       ...bookingData

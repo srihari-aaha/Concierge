@@ -8,9 +8,9 @@ export default function ProviderSchedulePage() {
   const { conciergeRequests } = useApp();
 
   const scheduleSlots = [
-    { day: 'Thursday, Oct 12', time: '11:30 AM', title: 'Airport Chauffeur Transfer (MOPA)', loc: 'Palm Grove Villa, Ashwem', guest: '`Guest`' },
-    { day: 'Friday, Oct 13', time: '02:00 PM', title: 'Master AC Inspection & Servicing', loc: 'Palm Grove Villa', guest: 'Guest' },
-    { day: 'Sunday, Oct 15', time: '11:00 AM', title: 'Airport Departure Transfer', loc: 'Palm Grove Villa', guest: 'Guest' }
+    { day: 'Saturday, Oct 12, 2024', time: '11:30 AM', title: 'Airport Chauffeur Transfer (MOPA)', loc: 'Palm Grove Villa, Ashwem', guest: 'Guest' },
+    { day: 'Sunday, Oct 13, 2024', time: '02:00 PM', title: 'Master AC Inspection & Servicing', loc: 'Palm Grove Villa', guest: 'Guest' },
+    { day: 'Tuesday, Oct 15, 2024', time: '11:00 AM', title: 'Airport Departure Transfer', loc: 'Palm Grove Villa', guest: 'Guest' }
   ];
 
   return (

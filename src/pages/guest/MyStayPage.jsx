@@ -93,7 +93,7 @@ export default function MyStayPage() {
             <span className="timeline-tag">STAY LIFECYCLE</span>
             <h3 className="timeline-title">Your Journey Timeline</h3>
           </div>
-          <Timeline steps={stayTimelineSteps} currentStepIndex={1} orientation="horizontal" />
+          <Timeline steps={stayTimelineSteps} currentStepIndex={4} orientation="horizontal" />
         </div>
 
         {/* Access & Essentials Grid (Wi-Fi, Digital Key, House Rules) */}
@@ -131,11 +131,11 @@ export default function MyStayPage() {
               <span className="essential-label">FIBER WI-FI (300 MBPS)</span>
               <div className="wifi-network-name">{activeBooking?.wifiName || 'PalmGrove_HighSpeed_5G'}</div>
               <div className="code-display-row">
-                <span className="access-code wifi-pass">{activeBooking?.wifiPass || 'ashwem2026'}</span>
+                <span className="access-code wifi-pass">{activeBooking?.wifiPass || 'ashwem2024'}</span>
                 <button
                   type="button"
                   className="copy-btn"
-                  onClick={() => copyToClipboard(activeBooking?.wifiPass || 'ashwem2026', 'wifi')}
+                  onClick={() => copyToClipboard(activeBooking?.wifiPass || 'ashwem2024', 'wifi')}
                 >
                   {copiedWifi ? <Check size={14} /> : <Copy size={14} />}
                   <span>{copiedWifi ? 'Copied' : 'Copy'}</span>

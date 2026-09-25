@@ -662,7 +662,7 @@ export const SERVICE_PROVIDERS = [
 export const INITIAL_BOOKINGS = [
   {
     id: 'booking-1',
-    reference: 'STY-2026-00124',
+    reference: 'STY-2024-00124',
     propertyId: 'prop-1',
     propertyName: 'Palm Grove Retreat',
     propertyLocation: 'Ashwem, North Goa',
@@ -671,8 +671,8 @@ export const INITIAL_BOOKINGS = [
 
     guestEmail: 'priya.sharma@example.com',
     guestPhone: '+91 98201 55678',
-    checkIn: '2026-10-12',
-    checkOut: '2026-10-16',
+    checkIn: '2024-10-12',
+    checkOut: '2024-10-16',
     nights: 4,
     guestsCount: 2,
     pricePerNight: 16500,
@@ -683,17 +683,17 @@ export const INITIAL_BOOKINGS = [
     totalAmount: 81155,
     status: 'confirmed', // confirmed, checked-in, completed, cancelled
     paymentMethod: 'UPI (priya@okhdfcbank)',
-    paymentDate: '2026-09-20',
+    paymentDate: '2024-09-20',
     hostName: 'Owner',
     hostPhone: '+91 98221 88390',
     wifiName: 'PalmGrove_HighSpeed_5G',
-    wifiPass: 'ashwem2026',
+    wifiPass: 'ashwem2024',
     doorCode: '4821',
     emergencyContact: '+91 98221 00999 (StayEase Rapid Response)'
   },
   {
     id: 'booking-2',
-    reference: 'STY-2026-00089',
+    reference: 'STY-2024-00089',
     propertyId: 'prop-2',
     propertyName: 'Ocean Breeze Villa',
     propertyLocation: 'White Town, Pondicherry',
@@ -702,15 +702,15 @@ export const INITIAL_BOOKINGS = [
 
     guestEmail: 'priya.sharma@example.com',
     guestPhone: '+91 98201 55678',
-    checkIn: '2026-07-10',
-    checkOut: '2026-07-13',
+    checkIn: '2024-07-10',
+    checkOut: '2024-07-13',
     nights: 3,
     guestsCount: 2,
     pricePerNight: 13800,
     totalAmount: 48600,
     status: 'completed',
     paymentMethod: 'Credit Card (Ending in 4092)',
-    paymentDate: '2026-07-01'
+    paymentDate: '2024-07-01'
   }
 ];
 
@@ -718,13 +718,13 @@ export const INITIAL_CONCIERGE_REQUESTS = [
   {
     id: 'req-1',
     bookingId: 'booking-1',
-    bookingRef: 'STY-2026-00124',
+    bookingRef: 'STY-2024-00124',
     propertyId: 'prop-1',
     propertyName: 'Palm Grove Retreat',
     serviceId: 'trans-1',
     serviceTitle: 'Airport Transfer (MOPA Airport Arrival)',
     category: 'transportation',
-    date: '2026-10-12',
+    date: '2024-10-12',
     timeSlot: '11:30 AM',
     guestId: 'guest-1',
 
@@ -736,7 +736,7 @@ export const INITIAL_CONCIERGE_REQUESTS = [
     assignedProviderId: 'prov-1',
     assignedProviderName: 'Provider',
     assignedProviderPhone: '+91 98221 44021',
-    createdAt: '2026-09-21T10:15:00Z',
+    createdAt: '2024-09-21T10:15:00Z',
     statusTimeline: [
       { step: 'Requested', time: 'Sep 21, 10:15 AM', label: 'Requested by Guest' },
       { step: 'Accepted', time: 'Sep 21, 11:30 AM', label: 'Accepted by Owner' },
@@ -746,13 +746,13 @@ export const INITIAL_CONCIERGE_REQUESTS = [
   {
     id: 'req-2',
     bookingId: 'booking-1',
-    bookingRef: 'STY-2026-00124',
+    bookingRef: 'STY-2024-00124',
     propertyId: 'prop-1',
     propertyName: 'Palm Grove Retreat',
     serviceId: 'dine-1',
     serviceTitle: 'Private In-Villa Chef Experience (Coastal Goan)',
     category: 'dining',
-    date: '2026-10-13',
+    date: '2024-10-13',
     timeSlot: '7:30 PM',
     guestId: 'guest-1',
 
@@ -763,7 +763,7 @@ export const INITIAL_CONCIERGE_REQUESTS = [
     assignedProviderId: 'prov-2',
     assignedProviderName: 'Chef Anthony D’Souza',
     assignedProviderPhone: '+91 94481 22910',
-    createdAt: '2026-09-22T14:00:00Z',
+    createdAt: '2024-09-22T14:00:00Z',
     statusTimeline: [
       { step: 'Requested', time: 'Sep 22, 02:00 PM', label: 'Requested by Guest' },
       { step: 'Accepted', time: 'Sep 22, 03:10 PM', label: 'Accepted by Owner' },
@@ -786,7 +786,7 @@ export const INITIAL_MAINTENANCE_TICKETS = [
     status: 'assigned', // reported -> assigned -> in_progress -> resolved
     assignedToId: 'prov-1',
     assignedToName: 'Provider (Coastal Maintenance)',
-    reportedAt: '2026-09-22T16:20:00Z',
+    reportedAt: '2024-09-22T16:20:00Z',
     resolvedAt: null
   }
 ];
@@ -797,7 +797,7 @@ export const INITIAL_NOTIFICATIONS = [
     userId: 'guest-1',
     role: 'guest',
     title: 'Booking Confirmed at Palm Grove Villa',
-    message: 'Your stay from Oct 12 – 15, 2026 has been secured. Concierge services are ready to order.',
+    message: 'Your stay from Oct 12 – 15, 2024 has been secured. Concierge services are ready to order.',
     time: '2 days ago',
     read: false,
     link: '/guest/my-stay'
@@ -879,7 +879,7 @@ export const INITIAL_REVIEWS = [
       location: 5,
       value: 4.8
     },
-    date: 'July 2026',
+    date: 'July 2024',
     comment: 'The courtyard with frangipani blossoms is even more enchanting in person than the photographs. The concierge arranged fresh croissants from White Town daily and our heritage bicycles were in pristine condition. Pure tranquility.',
     serviceReviewed: 'Artisanal Breakfast & Bicycle Concierge'
   },
@@ -896,7 +896,7 @@ export const INITIAL_REVIEWS = [
       location: 4.9,
       value: 4.9
     },
-    date: 'August 2026',
+    date: 'August 2024',
     comment: 'StayEase took away every ounce of stress from our Goa holiday. Having Chef Anthony prepare private seafood dinners while the kids swam in the plunge pool was peak luxury. Unmatched hospitality.',
     serviceReviewed: 'Private In-Villa Chef Experience'
   }
