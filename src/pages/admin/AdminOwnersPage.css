@@ -1,0 +1,364 @@
+.admin-owners-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.owners-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.owner-col-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.owner-table-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid #E2E8F0;
+}
+
+.owner-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.owner-row-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text, #1F2937);
+  display: block;
+}
+
+.superhost-inline-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #B45309;
+  background-color: #FEF3C7;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid #FDE68A;
+}
+
+.member-since {
+  font-size: 0.725rem;
+  color: var(--text-secondary, #6B7280);
+}
+
+.owner-contact-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.775rem;
+  color: #475569;
+}
+
+.owner-contact-cell span {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.owner-city-text {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6B7280);
+}
+
+.portfolio-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.prop-count-val {
+  font-size: 0.85rem;
+  color: #1E293B;
+}
+
+.portfolio-sub {
+  font-size: 0.725rem;
+  color: #64748B;
+  max-width: 170px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.highlight-payout {
+  color: #047857;
+}
+
+.cell-sub-label {
+  display: block;
+  font-size: 0.68rem;
+  color: #94A3B8;
+}
+
+/* Drawer styles */
+.drawer-owner-profile-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.owner-drawer-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ED7014;
+}
+
+.owner-drawer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+}
+
+.drawer-name-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.owner-profile-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text, #1F2937);
+  margin: 0;
+}
+
+.superhost-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #B45309;
+  background-color: #FEF3C7;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid #FDE68A;
+}
+
+.owner-profile-sub {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin: 0;
+}
+
+.owner-pref-note {
+  font-size: 0.775rem;
+  color: #475569;
+  line-height: 1.4;
+  margin-top: 0.25rem;
+}
+
+/* Owner KPI Strip */
+.owner-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.o-stat-box {
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.o-stat-lbl {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.o-stat-val {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+/* Bank Details Card */
+.bank-details-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.bank-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.bank-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.bank-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.925rem;
+  color: #166534;
+}
+
+.kyc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #15803D;
+  background: #DCFCE7;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.bank-meta {
+  font-size: 0.775rem;
+  color: #374151;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Properties Grid in Drawer */
+.drawer-props-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.drawer-prop-mini-card {
+  display: flex;
+  gap: 0.65rem;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.5rem;
+  background: white;
+  align-items: center;
+}
+
+.prop-mini-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.prop-mini-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  overflow: hidden;
+}
+
+.prop-mini-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1E293B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prop-mini-loc {
+  font-size: 0.7rem;
+  color: #64748B;
+}
+
+.prop-mini-rate {
+  font-size: 0.725rem;
+  color: #047857;
+}
+
+.settlement-ref-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+
+.flow-tag {
+  font-size: 0.675rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.flow-tag.payout {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #DBEAFE;
+}
+
+.flow-tag.commission {
+  background: #FFF7ED;
+  color: #C2410C;
+  border: 1px solid #FFEDD5;
+}
+
+.settlement-val {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.owner-sub-empty {
+  font-size: 0.8rem;
+  color: #94A3B8;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .owner-kpi-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .drawer-props-grid {
+    grid-template-columns: 1fr;
+  }
+}

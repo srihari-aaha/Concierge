@@ -3,6 +3,7 @@ import { useApp } from './AppContext';
 import {
   INITIAL_HOUSEKEEPING_TASKS,
   INITIAL_STAFF_MEMBERS,
+  INITIAL_OWNERS,
   INITIAL_GUESTS,
   INITIAL_PAYMENT_TRANSACTIONS,
   INITIAL_AUDIT_LOGS,
@@ -15,7 +16,7 @@ import {
 
 const AdminContext = createContext(null);
 
-const STORAGE_ADMIN_KEY = 'stayease_admin_state_v1';
+const STORAGE_ADMIN_KEY = 'stayease_admin_state_v2';
 
 export function AdminProvider({ children }) {
   const {
@@ -50,13 +51,19 @@ export function AdminProvider({ children }) {
     return saved ? JSON.parse(saved) : INITIAL_STAFF_MEMBERS;
   });
 
+  // Owners Directory
+  const [owners, setOwners] = useState(() => {
+    const saved = localStorage.getItem(`${STORAGE_ADMIN_KEY}_owners`);
+    return saved ? JSON.parse(saved) : INITIAL_OWNERS;
+  });
+
   // Guests Directory
   const [guests, setGuests] = useState(() => {
     const saved = localStorage.getItem(`${STORAGE_ADMIN_KEY}_guests`);
     return saved ? JSON.parse(saved) : INITIAL_GUESTS;
   });
 
-  // Financial Transactions
+  // Financial Transactions (Between Owner & Super Admin)
   const [paymentTransactions, setPaymentTransactions] = useState(() => {
     const saved = localStorage.getItem(`${STORAGE_ADMIN_KEY}_payments`);
     return saved ? JSON.parse(saved) : INITIAL_PAYMENT_TRANSACTIONS;
@@ -104,6 +111,10 @@ export function AdminProvider({ children }) {
   useEffect(() => {
     localStorage.setItem(`${STORAGE_ADMIN_KEY}_staff`, JSON.stringify(staffMembers));
   }, [staffMembers]);
+
+  useEffect(() => {
+    localStorage.setItem(`${STORAGE_ADMIN_KEY}_owners`, JSON.stringify(owners));
+  }, [owners]);
 
   useEffect(() => {
     localStorage.setItem(`${STORAGE_ADMIN_KEY}_guests`, JSON.stringify(guests));
@@ -349,6 +360,13 @@ export function AdminProvider({ children }) {
           p.location.toLowerCase().includes(q) ||
           (p.ownerName && p.ownerName.toLowerCase().includes(q))
       ),
+      owners: owners.filter(
+        (o) =>
+          o.name.toLowerCase().includes(q) ||
+          o.email.toLowerCase().includes(q) ||
+          o.phone.includes(q) ||
+          (o.city && o.city.toLowerCase().includes(q))
+      ),
       guests: guests.filter(
         (g) =>
           g.name.toLowerCase().includes(q) ||
@@ -377,10 +395,29 @@ export function AdminProvider({ children }) {
       payments: paymentTransactions.filter(
         (t) =>
           t.id.toLowerCase().includes(q) ||
-          t.reservationRef.toLowerCase().includes(q) ||
-          t.guestName.toLowerCase().includes(q)
+          (t.ownerName && t.ownerName.toLowerCase().includes(q)) ||
+          (t.propertyName && t.propertyName.toLowerCase().includes(q)) ||
+          (t.utrNumber && t.utrNumber.toLowerCase().includes(q))
       )
     };
+  };
+
+  const updateOwner = (ownerId, patch) => {
+    setOwners((prev) =>
+      prev.map((o) => (o.id === ownerId ? { ...o, ...patch } : o))
+    );
+    const owner = owners.find((o) => o.id === ownerId);
+    addAuditLog('Updated Owner Details', 'Owner', ownerId, '', JSON.stringify(patch), owner?.name);
+    showToast('Owner profile updated.', 'success');
+  };
+
+  const processSettlement = (txnId, newStatus = 'settled') => {
+    setPaymentTransactions((prev) =>
+      prev.map((t) => (t.id === txnId ? { ...t, status: newStatus, payoutStatus: newStatus } : t))
+    );
+    const txn = paymentTransactions.find((t) => t.id === txnId);
+    addAuditLog('Processed Settlement', 'Payment', txnId, txn?.status || 'pending', newStatus, txn?.propertyName);
+    showToast(`Settlement ${txnId} marked as ${newStatus.toUpperCase()}`, 'success');
   };
 
   return (
@@ -397,10 +434,14 @@ export function AdminProvider({ children }) {
         staffMembers,
         updateStaffMember,
         addStaffMember,
+        owners,
+        setOwners,
+        updateOwner,
         guests,
         setGuests,
         paymentTransactions,
         refundReservation,
+        processSettlement,
         auditLogs,
         addAuditLog,
         locations,

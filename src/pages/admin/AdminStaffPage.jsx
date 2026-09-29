@@ -41,7 +41,7 @@ export default function AdminStaffPage() {
   const [isAddStaffModalOpen, setIsAddStaffModalOpen] = useState(false);
   const [newStaffData, setNewStaffData] = useState({
     name: '',
-    role: 'Concierge',
+    role: 'Concierge Manager',
     email: '',
     phone: '',
     assignedRegions: 'Goa Coastal Belt'
@@ -90,7 +90,7 @@ export default function AdminStaffPage() {
     setIsAddStaffModalOpen(false);
     setNewStaffData({
       name: '',
-      role: 'Concierge',
+      role: 'Concierge Manager',
       email: '',
       phone: '',
       assignedRegions: 'Goa Coastal Belt'
@@ -101,8 +101,8 @@ export default function AdminStaffPage() {
     <AdminLayout>
       <div className="admin-staff-page">
         <PageHeader
-          title="Staff & Service Fleet Roster"
-          subtitle="Manage operations managers, verified concierge attendants, housekeeping crews, and maintenance teams"
+          title="Staff & Service Team Roster"
+          subtitle="Manage Super Admins, Concierge Managers, Finance Advisers, and Support Specialists"
           breadcrumbs={[
             { label: 'Admin', path: '/admin/dashboard' },
             { label: 'Staff' }
@@ -139,11 +139,8 @@ export default function AdminStaffPage() {
             >
               <option value="all">All Operational Roles</option>
               <option value="Super Admin">Super Admin</option>
-              <option value="Property Manager">Property Manager</option>
               <option value="Concierge Manager">Concierge Manager</option>
-              <option value="Housekeeping">Housekeeping</option>
-              <option value="Maintenance">Maintenance</option>
-              <option value="Finance">Finance</option>
+              <option value="Finance Adviser">Finance Adviser</option>
               <option value="Support">Support</option>
             </select>
 
@@ -347,13 +344,10 @@ export default function AdminStaffPage() {
                   value={newStaffData.role}
                   onChange={(e) => setNewStaffData({ ...newStaffData, role: e.target.value })}
                 >
-                  <option value="Concierge">Concierge Specialist</option>
+                  <option value="Super Admin">Super Admin</option>
                   <option value="Concierge Manager">Concierge Manager</option>
-                  <option value="Property Manager">Property Manager</option>
-                  <option value="Housekeeping">Housekeeping Lead</option>
-                  <option value="Maintenance">Maintenance Technician</option>
-                  <option value="Support">Guest Support</option>
-                  <option value="Finance">Finance & Accounts</option>
+                  <option value="Finance Adviser">Finance Adviser</option>
+                  <option value="Support">Support</option>
                 </select>
               </div>
 

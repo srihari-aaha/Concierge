@@ -77,10 +77,9 @@ export default function DashboardSidebar() {
   const adminNav = [
     { label: 'Operations Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { label: 'Properties', path: '/admin/properties', icon: Home, badge: stats.adminPendingApprovals, badgeVariant: 'urgent' },
-    { label: 'Reservations', path: '/admin/reservations', icon: CalendarCheck },
-    { label: 'Concierge Dispatch', path: '/admin/concierge', icon: Sparkles },
     { label: 'Operations', path: '/admin/operations', icon: Wrench },
-    { label: 'Staff Roster', path: '/admin/staff', icon: Users },
+    { label: 'Owner Directory', path: '/admin/owners', icon: Users },
+    { label: 'Staff Roster', path: '/admin/staff', icon: Briefcase },
     { label: 'Platform Reports', path: '/admin/reports', icon: ShieldCheck },
     { label: 'Profile', path: '/admin/profile', icon: User }
   ];

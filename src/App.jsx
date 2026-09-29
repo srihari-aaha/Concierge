@@ -56,6 +56,7 @@ import AdminReservationsPage from './pages/admin/AdminReservationsPage';
 import AdminConciergePage from './pages/admin/AdminConciergePage';
 import AdminOperationsPage from './pages/admin/AdminOperationsPage';
 import AdminGuestsPage from './pages/admin/AdminGuestsPage';
+import AdminOwnersPage from './pages/admin/AdminOwnersPage';
 import AdminStaffPage from './pages/admin/AdminStaffPage';
 import AdminPaymentsPage from './pages/admin/AdminPaymentsPage';
 import AdminReviewsPage from './pages/admin/AdminReviewsPage';
@@ -392,10 +393,18 @@ function MainApp() {
           }
         />
         <Route
+          path="/admin/owners"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminOwnersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/admin/guests"
           element={
             <ProtectedRoute allowedRole="admin">
-              <AdminGuestsPage />
+              <AdminOwnersPage />
             </ProtectedRoute>
           }
         />

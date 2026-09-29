@@ -7,14 +7,16 @@ import {
   Filter,
   ArrowUpRight,
   ArrowDownRight,
-  RotateCcw,
   CheckCircle,
   AlertTriangle,
   FileText,
   Clock,
   Download,
   Building,
-  ShieldCheck
+  ShieldCheck,
+  Landmark,
+  ArrowRight,
+  RotateCcw
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 import AdminLayout from '../../components/admin/AdminLayout';
@@ -28,52 +30,51 @@ import Modal from '../../components/common/Modal';
 import './AdminPaymentsPage.css';
 
 export default function AdminPaymentsPage() {
-  const { paymentTransactions, refundReservation } = useAdmin();
+  const { paymentTransactions, processSettlement } = useAdmin();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const initialTab = searchParams.get('tab') || 'all'; // all, pending, refunded, failed
+  const initialTab = searchParams.get('tab') || 'all'; // all, payouts, commissions, pending
   const [activeTab, setActiveTab] = useState(initialTab);
   const [searchQuery, setSearchQuery] = useState('');
   const [methodFilter, setMethodFilter] = useState('all');
 
   const selectedTxnId = searchParams.get('id');
   const [drawerTxn, setDrawerTxn] = useState(() => {
-    return paymentTransactions.find((t) => t.id === selectedTxnId) || null;
+    return (paymentTransactions && paymentTransactions.find((t) => t.id === selectedTxnId)) || null;
   });
 
-  // Refund Modal State
-  const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
-  const [refundAmount, setRefundAmount] = useState('');
-  const [refundReason, setRefundReason] = useState('Authorized customer refund');
+  // Authorization modal
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  // Metrics
-  const totalGross = paymentTransactions
-    .filter((t) => t.status === 'paid')
-    .reduce((sum, t) => sum + (t.amount || 0), 0) + 685000;
-  const totalRefunded = paymentTransactions
-    .filter((t) => t.status === 'refunded')
+  // Metrics computation (Strictly Owner <-> Super Admin)
+  const totalVolume = paymentTransactions.reduce((sum, t) => sum + (t.grossRental || t.amount || 0), 0) + 650000;
+  const totalCommission = paymentTransactions.reduce((sum, t) => sum + (t.commissionFee || Math.round((t.amount || 0) * 0.1)), 0) + 65000;
+  const pendingDisbursements = paymentTransactions
+    .filter((t) => t.status === 'pending' || t.payoutStatus === 'pending')
     .reduce((sum, t) => sum + (t.amount || 0), 0);
-  const pendingPayouts = paymentTransactions
-    .filter((t) => t.payoutStatus === 'pending')
-    .reduce((sum, t) => sum + (t.ownerPayout || 0), 0);
+  const totalDisbursed = paymentTransactions
+    .filter((t) => (t.flowType === 'payout' || t.flow?.includes('Owner')) && t.status === 'settled')
+    .reduce((sum, t) => sum + (t.amount || 0), 0) + 585000;
 
   const filteredTxns = useMemo(() => {
+    if (!paymentTransactions) return [];
     return paymentTransactions.filter((t) => {
-      if (activeTab === 'pending' && t.payoutStatus !== 'pending') return false;
-      if (activeTab === 'refunded' && t.status !== 'refunded') return false;
-      if (activeTab === 'failed' && t.status !== 'failed') return false;
+      if (activeTab === 'payouts' && t.flowType !== 'payout' && !t.flow?.includes('Owner')) return false;
+      if (activeTab === 'commissions' && t.flowType !== 'commission' && !t.flow?.includes('Super Admin')) return false;
+      if (activeTab === 'pending' && t.status !== 'pending' && t.payoutStatus !== 'pending') return false;
 
-      if (methodFilter !== 'all' && !t.paymentMethod.toLowerCase().includes(methodFilter.toLowerCase())) {
+      if (methodFilter !== 'all' && !t.paymentMethod?.toLowerCase().includes(methodFilter.toLowerCase())) {
         return false;
       }
 
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         return (
-          t.id.toLowerCase().includes(q) ||
-          t.reservationRef.toLowerCase().includes(q) ||
-          t.guestName.toLowerCase().includes(q) ||
-          t.propertyName.toLowerCase().includes(q)
+          t.id?.toLowerCase().includes(q) ||
+          t.ownerName?.toLowerCase().includes(q) ||
+          t.ownerEmail?.toLowerCase().includes(q) ||
+          t.propertyName?.toLowerCase().includes(q) ||
+          t.utrNumber?.toLowerCase().includes(q)
         );
       }
       return true;
@@ -90,31 +91,23 @@ export default function AdminPaymentsPage() {
     setSearchParams({});
   };
 
-  const handleOpenRefund = (txn) => {
-    setDrawerTxn(txn);
-    setRefundAmount(String(txn.amount || 10000));
-    setIsRefundModalOpen(true);
-  };
-
-  const handleRefundSubmit = (e) => {
-    e.preventDefault();
-    if (!drawerTxn) return;
-    refundReservation(drawerTxn.reservationRef, refundAmount, refundReason);
-    setIsRefundModalOpen(false);
-    if (drawerTxn) {
-      setDrawerTxn({ ...drawerTxn, status: 'refunded', refundReason });
+  const handleAuthorizeRelease = (txn) => {
+    processSettlement(txn.id, 'settled');
+    if (drawerTxn?.id === txn.id) {
+      setDrawerTxn({ ...drawerTxn, status: 'settled', payoutStatus: 'settled' });
     }
+    setIsAuthModalOpen(false);
   };
 
   return (
     <AdminLayout>
       <div className="admin-payments-page">
         <PageHeader
-          title="Financial Ledger & Merchant Settlements"
-          subtitle="Audit gross booking revenues, platform commissions, guest refund disbursements, and host bank payouts"
+          title="Financial Ledger & Host Settlements"
+          subtitle="Audit platform disbursements, commissions, and bank settlements strictly between Property Owners and Super Admin"
           breadcrumbs={[
             { label: 'Admin', path: '/admin/dashboard' },
-            { label: 'Payments' }
+            { label: 'Payments & Ledger' }
           ]}
           actions={
             <Button
@@ -122,16 +115,19 @@ export default function AdminPaymentsPage() {
               size="sm"
               icon={Download}
               onClick={() => {
-                const csvData = paymentTransactions.map((t) => `${t.id},${t.reservationRef},${t.amount},${t.status}`).join('\n');
-                const blob = new Blob([csvData], { type: 'text/csv' });
+                const csvHeader = 'Settlement_ID,Owner_Name,Property,Flow,Amount,Commission,Channel,Status,Date\n';
+                const csvData = paymentTransactions
+                  .map((t) => `${t.id},"${t.ownerName}","${t.propertyName}","${t.flow}",${t.amount},${t.commissionFee || ''},"${t.paymentMethod}","${t.status}","${t.date}"`)
+                  .join('\n');
+                const blob = new Blob([csvHeader + csvData], { type: 'text/csv' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `stayease-transactions-${Date.now()}.csv`;
+                a.download = `stayease-owner-ledger-${Date.now()}.csv`;
                 a.click();
               }}
             >
-              Export CSV Ledger
+              Export Host Ledger
             </Button>
           }
         />
@@ -139,10 +135,10 @@ export default function AdminPaymentsPage() {
         {/* Financial KPI Cards */}
         <div className="payments-kpi-grid">
           <StatCard
-            label="Total Gross Volume"
-            value={`₹${(totalGross / 100000).toFixed(2)}L`}
-            subtitle="Processed this month"
-            trend="+15.8% YoY"
+            label="Total Settled Volume"
+            value={`₹${(totalVolume / 100000).toFixed(2)}L`}
+            subtitle="Rental transactions reconciled"
+            trend="+16.4% YoY"
             trendDirection="up"
             icon={DollarSign}
             iconBg="#ECFDF5"
@@ -150,9 +146,9 @@ export default function AdminPaymentsPage() {
           />
 
           <StatCard
-            label="Platform Commission (10%)"
-            value={`₹${Math.round(totalGross * 0.1).toLocaleString('en-IN')}`}
-            subtitle="StayEase net earnings"
+            label="Super Admin Commission (10%)"
+            value={`₹${totalCommission.toLocaleString('en-IN')}`}
+            subtitle="Platform retained margin"
             trend="+12.4%"
             trendDirection="up"
             icon={Building}
@@ -161,10 +157,10 @@ export default function AdminPaymentsPage() {
           />
 
           <StatCard
-            label="Pending Host Payouts"
-            value={`₹${pendingPayouts.toLocaleString('en-IN')}`}
+            label="Pending Owner Disbursements"
+            value={`₹${pendingDisbursements.toLocaleString('en-IN')}`}
             subtitle="Next scheduled batch: Friday"
-            trend="1 Host settlement"
+            trend="1 Batch awaiting release"
             trendDirection="neutral"
             icon={Clock}
             iconBg="#EFF6FF"
@@ -172,14 +168,14 @@ export default function AdminPaymentsPage() {
           />
 
           <StatCard
-            label="Processed Refunds"
-            value={`₹${totalRefunded.toLocaleString('en-IN')}`}
-            subtitle="100% Policy compliant"
-            trend="1 Approved refund"
-            trendDirection="neutral"
-            icon={RotateCcw}
-            iconBg="#FEF2F2"
-            iconColor="#DC2626"
+            label="Disbursed to Owners"
+            value={`₹${(totalDisbursed / 100000).toFixed(2)}L`}
+            subtitle="100% Escrow compliant payouts"
+            trend="Settled via NEFT / RTGS"
+            trendDirection="up"
+            icon={Landmark}
+            iconBg="#F0FDF4"
+            iconColor="#059669"
           />
         </div>
 
@@ -191,28 +187,28 @@ export default function AdminPaymentsPage() {
               className={`pay-tab-pill ${activeTab === 'all' ? 'active' : ''}`}
               onClick={() => setActiveTab('all')}
             >
-              All Transactions ({paymentTransactions.length})
+              All Settlements ({paymentTransactions.length})
+            </button>
+            <button
+              type="button"
+              className={`pay-tab-pill ${activeTab === 'payouts' ? 'active' : ''}`}
+              onClick={() => setActiveTab('payouts')}
+            >
+              Super Admin → Owner (Disbursements)
+            </button>
+            <button
+              type="button"
+              className={`pay-tab-pill ${activeTab === 'commissions' ? 'active' : ''}`}
+              onClick={() => setActiveTab('commissions')}
+            >
+              Owner → Super Admin (Commissions)
             </button>
             <button
               type="button"
               className={`pay-tab-pill ${activeTab === 'pending' ? 'active' : ''}`}
               onClick={() => setActiveTab('pending')}
             >
-              Pending Payouts
-            </button>
-            <button
-              type="button"
-              className={`pay-tab-pill ${activeTab === 'refunded' ? 'active' : ''}`}
-              onClick={() => setActiveTab('refunded')}
-            >
-              Refunds Disbursed
-            </button>
-            <button
-              type="button"
-              className={`pay-tab-pill ${activeTab === 'failed' ? 'active' : ''}`}
-              onClick={() => setActiveTab('failed')}
-            >
-              Failed Checkouts
+              Pending Authorization
             </button>
           </div>
         </div>
@@ -223,7 +219,7 @@ export default function AdminPaymentsPage() {
             <Search size={16} className="filter-icon" />
             <input
               type="text"
-              placeholder="Search TXN ID, reservation reference, guest..."
+              placeholder="Search Settlement ID, Owner Name, Property, UTR reference..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -235,10 +231,11 @@ export default function AdminPaymentsPage() {
               value={methodFilter}
               onChange={(e) => setMethodFilter(e.target.value)}
             >
-              <option value="all">All Payment Gateways</option>
-              <option value="upi">UPI (GPay / PhonePe / Paytm)</option>
-              <option value="card">Credit Card (Visa / Mastercard)</option>
-              <option value="netbanking">NetBanking</option>
+              <option value="all">All Settlement Channels</option>
+              <option value="neft">NEFT Bank Transfer</option>
+              <option value="rtgs">RTGS Immediate Transfer</option>
+              <option value="ach">Corporate Direct Debit (ACH)</option>
+              <option value="escrow">Direct Escrow Retention</option>
             </select>
 
             {(searchQuery || methodFilter !== 'all') && (
@@ -257,12 +254,12 @@ export default function AdminPaymentsPage() {
           </div>
         </div>
 
-        {/* Transactions Table */}
+        {/* Bilateral Transactions Table (Strictly Owner <-> Super Admin) */}
         {filteredTxns.length === 0 ? (
           <EmptyState
             icon={CreditCard}
-            title="No transactions found"
-            description="No payment ledgers match the selected filters."
+            title="No settlement transactions found"
+            description="No owner-to-superadmin ledger records match the selected filters."
             actionText="Clear Filters"
             onAction={() => {
               setSearchQuery('');
@@ -275,184 +272,235 @@ export default function AdminPaymentsPage() {
             <table className="admin-data-table">
               <thead>
                 <tr>
-                  <th>TRANSACTION ID</th>
-                  <th>RESERVATION REF</th>
-                  <th>GUEST</th>
+                  <th>SETTLEMENT ID</th>
+                  <th>PROPERTY OWNER</th>
                   <th>PROPERTY</th>
+                  <th>TRANSACTION FLOW</th>
                   <th>AMOUNT</th>
-                  <th>PAYMENT METHOD</th>
-                  <th>PAYMENT STATUS</th>
-                  <th>PAYOUT STATUS</th>
-                  <th>TIMESTAMP</th>
+                  <th>COMMISSION</th>
+                  <th>PAYMENT CHANNEL</th>
+                  <th>STATUS</th>
+                  <th>DATE & TIME</th>
                   <th style={{ textAlign: 'right' }}>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredTxns.map((t) => (
-                  <tr key={t.id} onClick={() => handleOpenDetail(t)} style={{ cursor: 'pointer' }}>
-                    <td>
-                      <span className="txn-id-badge">{t.id}</span>
-                    </td>
-                    <td>
-                      <span className="ref-badge">{t.reservationRef}</span>
-                    </td>
-                    <td>
-                      <span className="guest-name-text">{t.guestName}</span>
-                    </td>
-                    <td>
-                      <span className="prop-name-text">{t.propertyName}</span>
-                    </td>
-                    <td>
-                      <strong className="table-amount">₹{t.amount?.toLocaleString('en-IN')}</strong>
-                    </td>
-                    <td>
-                      <span className="method-tag">{t.paymentMethod}</span>
-                    </td>
-                    <td>
-                      <StatusBadge status={t.status} />
-                    </td>
-                    <td>
-                      <StatusBadge status={t.payoutStatus} />
-                    </td>
-                    <td>
-                      <span className="timestamp-text">{t.date}</span>
-                    </td>
-                    <td style={{ textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
-                      <div className="table-row-actions">
-                        {t.status === 'paid' && (
+                {filteredTxns.map((t) => {
+                  const isPayout = t.flowType === 'payout' || t.flow?.includes('Owner');
+                  return (
+                    <tr key={t.id} onClick={() => handleOpenDetail(t)} style={{ cursor: 'pointer' }}>
+                      <td>
+                        <span className="txn-id-badge">{t.id}</span>
+                      </td>
+                      <td>
+                        <div className="owner-cell-info">
+                          <strong className="owner-name-bold">{t.ownerName}</strong>
+                          <span className="owner-bank-sub">{t.bankAccount || t.ownerEmail}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="prop-name-text">{t.propertyName}</span>
+                      </td>
+                      <td>
+                        <span className={`flow-badge ${isPayout ? 'payout' : 'commission'}`}>
+                          {isPayout ? (
+                            <>
+                              <ArrowDownRight size={13} /> Super Admin → Owner
+                            </>
+                          ) : (
+                            <>
+                              <ArrowUpRight size={13} /> Owner → Super Admin
+                            </>
+                          )}
+                        </span>
+                      </td>
+                      <td>
+                        <strong className="table-amount">₹{t.amount?.toLocaleString('en-IN')}</strong>
+                      </td>
+                      <td>
+                        <span className="method-tag">₹{(t.commissionFee || Math.round((t.amount || 0) * 0.1))?.toLocaleString('en-IN')}</span>
+                      </td>
+                      <td>
+                        <span className="method-tag">{t.paymentMethod}</span>
+                      </td>
+                      <td>
+                        <StatusBadge status={t.status} />
+                      </td>
+                      <td>
+                        <span className="timestamp-text">{t.date}</span>
+                      </td>
+                      <td style={{ textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
+                        <div className="table-row-actions">
+                          {t.status === 'pending' && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setDrawerTxn(t);
+                                setIsAuthModalOpen(true);
+                              }}
+                            >
+                              Release
+                            </Button>
+                          )}
                           <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
-                            onClick={() => handleOpenRefund(t)}
+                            onClick={() => handleOpenDetail(t)}
                           >
-                            Refund
+                            Voucher
                           </Button>
-                        )}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleOpenDetail(t)}
-                        >
-                          Receipt
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         )}
 
-        {/* Transaction Detail Drawer */}
+        {/* Bilateral Settlement Detail Drawer */}
         {drawerTxn && (
           <DetailDrawer
             isOpen={Boolean(drawerTxn)}
             onClose={handleCloseDetail}
-            title={`Transaction Receipt — ${drawerTxn.id}`}
-            subtitle={`Ref: ${drawerTxn.reservationRef} • Settled via ${drawerTxn.paymentMethod}`}
+            title={`Settlement Voucher — ${drawerTxn.id}`}
+            subtitle={`Bilateral Settlement between Property Owner and Super Admin`}
             badges={<StatusBadge status={drawerTxn.status} />}
-            width="560px"
+            width="580px"
             footer={
               <div className="drawer-footer-actions">
-                {drawerTxn.status === 'paid' && (
+                {drawerTxn.status === 'pending' && (
                   <Button
-                    variant="danger"
+                    variant="primary"
                     size="sm"
-                    icon={RotateCcw}
-                    onClick={() => handleOpenRefund(drawerTxn)}
+                    icon={CheckCircle}
+                    onClick={() => handleAuthorizeRelease(drawerTxn)}
                   >
-                    Initiate Refund
+                    Authorize Settlement Release
                   </Button>
                 )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCloseDetail}
+                >
+                  Close Voucher
+                </Button>
               </div>
             }
           >
             <div className="receipt-drawer-content">
+              {/* Voucher Top Card */}
               <div className="receipt-header-card">
                 <span className="receipt-lbl">TOTAL SETTLED AMOUNT</span>
                 <div className="receipt-big-amount">₹{drawerTxn.amount?.toLocaleString('en-IN')}</div>
-                <span className="receipt-gateway-id">Gateway ID: {drawerTxn.gatewayId || 'pay_live_0912'}</span>
+                <span className="receipt-gateway-id">Bank UTR / Ref: {drawerTxn.utrNumber || drawerTxn.gatewayId || 'UTR-20240924-9104'}</span>
               </div>
 
+              {/* Bilateral Transacting Parties */}
               <div className="drawer-section">
-                <h5 className="section-sub-title">Fee Breakdown & Splits</h5>
-                <div className="fee-split-box">
-                  <div className="fee-split-row">
-                    <span>Gross Guest Charge</span>
-                    <strong>₹{drawerTxn.amount?.toLocaleString('en-IN')}</strong>
+                <h5 className="section-sub-title">Transacting Parties</h5>
+                <div className="transacting-parties-box">
+                  <div className="party-col">
+                    <span className="party-lbl">Platform Authority</span>
+                    <strong className="party-name">Super Admin Treasury</strong>
+                    <span className="party-meta">StayEase Central Escrow</span>
+                    <span className="party-meta">A/C: ICICI Corp •••• 9901</span>
                   </div>
-                  <div className="fee-split-row">
-                    <span>StayEase Platform Fee (10%)</span>
-                    <strong style={{ color: 'var(--primary)' }}>
-                      ₹{drawerTxn.platformFee ? drawerTxn.platformFee.toLocaleString('en-IN') : Math.round((drawerTxn.amount || 30000) * 0.1).toLocaleString('en-IN')}
-                    </strong>
+
+                  <div className="party-arrow-divider">
+                    {drawerTxn.flowType === 'payout' || drawerTxn.flow?.includes('Owner') ? (
+                      <ArrowRight size={16} />
+                    ) : (
+                      <ArrowRight size={16} style={{ transform: 'rotate(180deg)' }} />
+                    )}
                   </div>
-                  <div className="fee-split-row">
-                    <span>Net Owner Payout</span>
-                    <strong>
-                      ₹{drawerTxn.ownerPayout ? drawerTxn.ownerPayout.toLocaleString('en-IN') : Math.round((drawerTxn.amount || 30000) * 0.9).toLocaleString('en-IN')}
-                    </strong>
-                  </div>
-                  <div className="fee-split-row">
-                    <span>Host Bank Payout Status</span>
-                    <StatusBadge status={drawerTxn.payoutStatus || 'settled'} />
+
+                  <div className="party-col">
+                    <span className="party-lbl">Property Owner</span>
+                    <strong className="party-name">{drawerTxn.ownerName}</strong>
+                    <span className="party-meta">{drawerTxn.ownerEmail}</span>
+                    <span className="party-meta">{drawerTxn.bankAccount || 'HDFC Bank •••• 4892'}</span>
                   </div>
                 </div>
               </div>
 
-              {drawerTxn.refundReason && (
-                <div className="refund-audit-callout">
-                  <strong>Refund Audit Reason:</strong>
-                  <p>{drawerTxn.refundReason}</p>
+              {/* Fee & Split Breakdown */}
+              <div className="drawer-section">
+                <h5 className="section-sub-title">Settlement Reconciliation</h5>
+                <div className="fee-split-box">
+                  <div className="fee-split-row">
+                    <span>Associated Property</span>
+                    <strong>{drawerTxn.propertyName}</strong>
+                  </div>
+                  <div className="fee-split-row">
+                    <span>Transaction Direction</span>
+                    <strong style={{ color: 'var(--primary)' }}>{drawerTxn.flow}</strong>
+                  </div>
+                  <div className="fee-split-row">
+                    <span>Gross Villa Booking Revenue</span>
+                    <strong>₹{(drawerTxn.grossRental || drawerTxn.amount || 45000)?.toLocaleString('en-IN')}</strong>
+                  </div>
+                  <div className="fee-split-row">
+                    <span>Super Admin Platform Commission (10%)</span>
+                    <strong style={{ color: '#C2410C' }}>
+                      ₹{(drawerTxn.commissionFee || Math.round((drawerTxn.amount || 40000) * 0.1))?.toLocaleString('en-IN')}
+                    </strong>
+                  </div>
+                  <div className="fee-split-row total-row">
+                    <span>Net Transferred Settlement</span>
+                    <strong style={{ color: '#047857' }}>
+                      ₹{drawerTxn.amount?.toLocaleString('en-IN')}
+                    </strong>
+                  </div>
+                  <div className="fee-split-row">
+                    <span>Settlement Mode & Bank Channel</span>
+                    <span>{drawerTxn.paymentMethod}</span>
+                  </div>
+                  <div className="fee-split-row">
+                    <span>Settlement Timestamp</span>
+                    <span>{drawerTxn.date}</span>
+                  </div>
+                </div>
+              </div>
+
+              {drawerTxn.notes && (
+                <div className="settlement-audit-callout">
+                  <strong>Settlement Ledger Memo:</strong>
+                  <p>{drawerTxn.notes}</p>
                 </div>
               )}
             </div>
           </DetailDrawer>
         )}
 
-        {/* Refund Authorization Modal */}
+        {/* Authorize Modal */}
         <Modal
-          isOpen={isRefundModalOpen}
-          onClose={() => setIsRefundModalOpen(false)}
-          title="Authorize Merchant Refund"
-          subtitle={`Disburse payment reversal for ${drawerTxn?.id}`}
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          title="Authorize Host Settlement Release"
+          subtitle={`Disburse payment to ${drawerTxn?.ownerName}`}
           maxWidth="460px"
         >
-          <form onSubmit={handleRefundSubmit} className="refund-form">
-            <div className="form-group">
-              <label>Reversal Amount (₹) *</label>
-              <input
-                type="number"
-                required
-                max={drawerTxn?.amount || 100000}
-                value={refundAmount}
-                onChange={(e) => setRefundAmount(e.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Reason for Authorization *</label>
-              <select
-                value={refundReason}
-                onChange={(e) => setRefundReason(e.target.value)}
-              >
-                <option value="Guest cancellation within policy window">Guest cancellation within policy window</option>
-                <option value="Monsoon / severe coastal weather cancellation">Monsoon / severe coastal weather cancellation</option>
-                <option value="Operational villa maintenance failure">Operational villa maintenance failure</option>
-                <option value="Duplicate payment refund">Duplicate payment refund</option>
-              </select>
-            </div>
-
-            <div className="form-actions-row">
-              <Button variant="outline" size="md" onClick={() => setIsRefundModalOpen(false)}>
+          <div className="auth-release-modal" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <p style={{ fontSize: '0.875rem', color: '#475569', lineHeight: 1.5 }}>
+              Are you sure you want to authorize the release of <strong>₹{drawerTxn?.amount?.toLocaleString('en-IN')}</strong> from Super Admin Escrow to <strong>{drawerTxn?.ownerName}</strong> ({drawerTxn?.bankAccount})?
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1rem' }}>
+              <Button variant="outline" size="md" onClick={() => setIsAuthModalOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="danger" size="md" type="submit">
-                Execute Refund
+              <Button
+                variant="primary"
+                size="md"
+                onClick={() => handleAuthorizeRelease(drawerTxn)}
+              >
+                Confirm & Disburse
               </Button>
             </div>
-          </form>
+          </div>
         </Modal>
       </div>
     </AdminLayout>

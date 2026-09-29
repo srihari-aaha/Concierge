@@ -48,12 +48,13 @@ export default function GlobalSearchModal({ isOpen, onClose }) {
 
   const results = searchAll(query);
   const hasResults =
-    results.properties.length > 0 ||
-    results.guests.length > 0 ||
-    results.reservations.length > 0 ||
-    results.concierge.length > 0 ||
-    results.staff.length > 0 ||
-    results.payments.length > 0;
+    results.properties?.length > 0 ||
+    results.owners?.length > 0 ||
+    results.guests?.length > 0 ||
+    results.reservations?.length > 0 ||
+    results.concierge?.length > 0 ||
+    results.staff?.length > 0 ||
+    results.payments?.length > 0;
 
   const handleSelect = (path) => {
     navigate(path);
@@ -70,7 +71,7 @@ export default function GlobalSearchModal({ isOpen, onClose }) {
             ref={inputRef}
             type="text"
             className="search-input-field"
-            placeholder="Search properties, guests, reservations, concierge, staff, payments..."
+            placeholder="Search properties, owners, staff, ledger payments..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -104,30 +105,23 @@ export default function GlobalSearchModal({ isOpen, onClose }) {
                 <button
                   type="button"
                   className="quick-nav-pill"
-                  onClick={() => handleSelect('/admin/reservations')}
-                >
-                  <CalendarCheck size={15} /> Reservations
-                </button>
-                <button
-                  type="button"
-                  className="quick-nav-pill"
-                  onClick={() => handleSelect('/admin/concierge')}
-                >
-                  <Sparkles size={15} /> Concierge Queue
-                </button>
-                <button
-                  type="button"
-                  className="quick-nav-pill"
                   onClick={() => handleSelect('/admin/operations')}
                 >
-                  Housekeeping & Maintenance
+                  Housekeeping & Operations
                 </button>
                 <button
                   type="button"
                   className="quick-nav-pill"
-                  onClick={() => handleSelect('/admin/guests')}
+                  onClick={() => handleSelect('/admin/owners')}
                 >
-                  <Users size={15} /> Guests Directory
+                  <Users size={15} /> Owner Directory
+                </button>
+                <button
+                  type="button"
+                  className="quick-nav-pill"
+                  onClick={() => handleSelect('/admin/staff')}
+                >
+                  Staff & Team
                 </button>
                 <button
                   type="button"
@@ -218,21 +212,22 @@ export default function GlobalSearchModal({ isOpen, onClose }) {
               )}
 
               {/* Guests */}
-              {results.guests.length > 0 && (
+              {/* Owners */}
+              {results.owners && results.owners.length > 0 && (
                 <div className="search-result-group">
                   <div className="group-title">
-                    <Users size={14} /> Guests ({results.guests.length})
+                    <Users size={14} /> Property Owners ({results.owners.length})
                   </div>
-                  {results.guests.slice(0, 3).map((g) => (
+                  {results.owners.slice(0, 3).map((o) => (
                     <div
-                      key={g.id}
+                      key={o.id}
                       className="search-item"
-                      onClick={() => handleSelect(`/admin/guests?id=${g.id}`)}
+                      onClick={() => handleSelect(`/admin/owners?id=${o.id}`)}
                     >
                       <div className="search-item-info">
-                        <span className="search-item-primary">{g.name}</span>
+                        <span className="search-item-primary">{o.name} {o.status === 'superhost' ? '★ Superhost' : ''}</span>
                         <span className="search-item-secondary">
-                          {g.email} • {g.city} • {g.reservationsCount} stays • Total ₹{g.totalSpent?.toLocaleString('en-IN')}
+                          {o.email} • {o.city} • {o.propertiesCount} properties • Settlements: ₹{o.totalPayouts?.toLocaleString('en-IN')}
                         </span>
                       </div>
                       <ArrowRight size={14} className="search-item-arrow" />
@@ -265,11 +260,11 @@ export default function GlobalSearchModal({ isOpen, onClose }) {
                 </div>
               )}
 
-              {/* Payments */}
+              {/* Payments & Host Settlements */}
               {results.payments.length > 0 && (
                 <div className="search-result-group">
                   <div className="group-title">
-                    <CreditCard size={14} /> Payments ({results.payments.length})
+                    <CreditCard size={14} /> Host Settlements ({results.payments.length})
                   </div>
                   {results.payments.slice(0, 3).map((t) => (
                     <div
@@ -280,7 +275,7 @@ export default function GlobalSearchModal({ isOpen, onClose }) {
                       <div className="search-item-info">
                         <span className="search-item-primary">{t.id} — ₹{t.amount?.toLocaleString('en-IN')}</span>
                         <span className="search-item-secondary">
-                          {t.guestName} • {t.paymentMethod} • Status: {t.status.toUpperCase()}
+                          Owner: {t.ownerName} • {t.flow} • {t.paymentMethod}
                         </span>
                       </div>
                       <ArrowRight size={14} className="search-item-arrow" />

@@ -3,8 +3,6 @@ import { NavLink, Link, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Home,
-  CalendarCheck,
-  Sparkles,
   Wrench,
   Users,
   UserCheck,
@@ -30,12 +28,11 @@ export default function AdminSidebar({ isCollapsed, onToggleCollapse, isMobileOp
 
   // Action badge counts
   const pendingApprovalsCount = properties.filter((p) => p.status === 'pending_approval').length;
-  const pendingConciergeCount = conciergeRequests.filter((r) => r.status === 'requested' || r.status === 'pending').length;
   const openOperationsCount =
     housekeepingTasks.filter((t) => t.status === 'pending' || t.status === 'cleaning').length +
     maintenanceTickets.filter((m) => m.status !== 'resolved' && m.status !== 'closed').length;
   const unreadNotifsCount = notifications.filter((n) => !n.read).length;
-  const failedPaymentsCount = paymentTransactions.filter((t) => t.status === 'failed').length;
+  const failedPaymentsCount = paymentTransactions.filter((t) => t.status === 'failed' || t.status === 'disputed').length;
 
   const navSections = [
     {
@@ -50,18 +47,6 @@ export default function AdminSidebar({ isCollapsed, onToggleCollapse, isMobileOp
           badgeVariant: 'urgent'
         },
         {
-          label: 'Reservations',
-          path: '/admin/reservations',
-          icon: CalendarCheck
-        },
-        {
-          label: 'Concierge Dispatch',
-          path: '/admin/concierge',
-          icon: Sparkles,
-          badge: pendingConciergeCount > 0 ? pendingConciergeCount : null,
-          badgeVariant: 'urgent'
-        },
-        {
           label: 'Operations',
           path: '/admin/operations',
           icon: Wrench,
@@ -73,7 +58,7 @@ export default function AdminSidebar({ isCollapsed, onToggleCollapse, isMobileOp
     {
       title: 'PEOPLE & FINANCE',
       items: [
-        { label: 'Guests Directory', path: '/admin/guests', icon: Users },
+        { label: 'Owner Directory', path: '/admin/owners', icon: Users },
         { label: 'Staff & Team', path: '/admin/staff', icon: UserCheck },
         {
           label: 'Payments & Ledger',
