@@ -1,0 +1,146 @@
+.admin-payments-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.payments-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.payments-tab-bar {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border, #E5E7EB);
+  padding-bottom: 0.85rem;
+  overflow-x: auto;
+}
+
+.pay-tab-pill {
+  padding: 0.45rem 0.95rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--border, #E5E7EB);
+  color: var(--text-secondary, #6B7280);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.pay-tab-pill:hover {
+  background-color: #F8FAFC;
+  color: var(--text, #1F2937);
+}
+
+.pay-tab-pill.active {
+  background-color: var(--primary, #ED7014);
+  color: #FFFFFF;
+  border-color: var(--primary, #ED7014);
+}
+
+.payments-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.txn-id-badge {
+  font-family: monospace;
+  font-weight: 700;
+  color: #0F766E;
+  background-color: #F0FDFA;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.775rem;
+}
+
+.method-tag {
+  font-size: 0.775rem;
+  color: #475569;
+}
+
+.timestamp-text {
+  font-size: 0.775rem;
+  color: #64748B;
+}
+
+/* Receipt Drawer */
+.receipt-drawer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.receipt-header-card {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.receipt-lbl {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #94A3B8;
+}
+
+.receipt-big-amount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text, #1F2937);
+  letter-spacing: -0.02em;
+}
+
+.receipt-gateway-id {
+  font-size: 0.75rem;
+  color: #64748B;
+  font-family: monospace;
+}
+
+.fee-split-box {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fee-split-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.825rem;
+  color: var(--text, #1F2937);
+}
+
+.refund-audit-callout {
+  background-color: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 0.85rem;
+}
+
+.refund-audit-callout strong {
+  font-size: 0.8rem;
+  color: #991B1B;
+}
+
+.refund-audit-callout p {
+  font-size: 0.775rem;
+  color: #B91C1C;
+  margin: 0.2rem 0 0 0;
+}

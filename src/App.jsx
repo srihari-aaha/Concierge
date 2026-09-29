@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AppProvider, useApp } from './context/AppContext';
+import { AdminProvider } from './context/AdminContext';
 
 // Common Components & Guards
 import Toast from './components/common/Toast';
@@ -48,8 +49,19 @@ import ProviderSchedulePage from './pages/provider/ProviderSchedulePage';
 import ProviderEarningsPage from './pages/provider/ProviderEarningsPage';
 import ProviderProfilePage from './pages/provider/ProviderProfilePage';
 
-// Admin Pages
+// Admin Pages (Complete Operational Suite)
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import AdminPropertiesPage from './pages/admin/AdminPropertiesPage';
+import AdminReservationsPage from './pages/admin/AdminReservationsPage';
+import AdminConciergePage from './pages/admin/AdminConciergePage';
+import AdminOperationsPage from './pages/admin/AdminOperationsPage';
+import AdminGuestsPage from './pages/admin/AdminGuestsPage';
+import AdminStaffPage from './pages/admin/AdminStaffPage';
+import AdminPaymentsPage from './pages/admin/AdminPaymentsPage';
+import AdminReviewsPage from './pages/admin/AdminReviewsPage';
+import AdminCommunicationsPage from './pages/admin/AdminCommunicationsPage';
+import AdminReportsPage from './pages/admin/AdminReportsPage';
+import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 import AdminProfilePage from './pages/admin/AdminProfilePage';
 
 // Cross-role Messages Page
@@ -313,7 +325,8 @@ function MainApp() {
           }
         />
 
-        {/* Admin Portal (Role-Guarded) */}
+        {/* Admin Portal (Role-Guarded Complete Operations Portal) */}
+        <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
         <Route
           path="/admin/dashboard"
           element={
@@ -326,7 +339,15 @@ function MainApp() {
           path="/admin/properties"
           element={
             <ProtectedRoute allowedRole="admin">
-              <AdminDashboardPage />
+              <AdminPropertiesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/reservations"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminReservationsPage />
             </ProtectedRoute>
           }
         />
@@ -334,7 +355,7 @@ function MainApp() {
           path="/admin/bookings"
           element={
             <ProtectedRoute allowedRole="admin">
-              <AdminDashboardPage />
+              <AdminReservationsPage />
             </ProtectedRoute>
           }
         />
@@ -342,15 +363,23 @@ function MainApp() {
           path="/admin/concierge"
           element={
             <ProtectedRoute allowedRole="admin">
-              <AdminDashboardPage />
+              <AdminConciergePage />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/admin/providers"
+          path="/admin/operations"
           element={
             <ProtectedRoute allowedRole="admin">
-              <AdminDashboardPage />
+              <AdminOperationsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/housekeeping"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminOperationsPage />
             </ProtectedRoute>
           }
         />
@@ -358,7 +387,55 @@ function MainApp() {
           path="/admin/maintenance"
           element={
             <ProtectedRoute allowedRole="admin">
-              <AdminDashboardPage />
+              <AdminOperationsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/guests"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminGuestsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/staff"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminStaffPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/providers"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminStaffPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/payments"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminPaymentsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/reviews"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminReviewsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/communications"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminCommunicationsPage />
             </ProtectedRoute>
           }
         />
@@ -366,7 +443,15 @@ function MainApp() {
           path="/admin/reports"
           element={
             <ProtectedRoute allowedRole="admin">
-              <AdminDashboardPage />
+              <AdminReportsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/settings"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminSettingsPage />
             </ProtectedRoute>
           }
         />
@@ -400,7 +485,9 @@ export default function App() {
   return (
     <Router>
       <AppProvider>
-        <MainApp />
+        <AdminProvider>
+          <MainApp />
+        </AdminProvider>
       </AppProvider>
     </Router>
   );

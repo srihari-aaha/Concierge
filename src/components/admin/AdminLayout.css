@@ -1,0 +1,66 @@
+.admin-layout-root {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--background, #F8FAFC);
+  color: var(--text, #1F2937);
+  width: 100%;
+}
+
+.admin-layout-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.admin-content-area {
+  flex: 1;
+  padding: 1.75rem 2rem 3.5rem;
+  max-width: 1540px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.admin-content-area.no-padding {
+  padding: 0;
+  max-width: 100%;
+}
+
+/* Mobile Drawer Overlay */
+.admin-mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+}
+
+.admin-mobile-drawer {
+  width: 270px;
+  height: 100%;
+  background-color: #FFFFFF;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  animation: drawerSlideRight 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes drawerSlideRight {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@media (max-width: 1024px) {
+  .admin-content-area {
+    padding: 1.5rem 1.25rem 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar {
+    display: none;
+  }
+  .admin-content-area {
+    padding: 1.25rem 1rem 2.5rem;
+  }
+}

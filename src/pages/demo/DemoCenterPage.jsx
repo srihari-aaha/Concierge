@@ -83,7 +83,16 @@ export default function DemoCenterPage() {
       defaultPath: '/admin/dashboard',
       subLinks: [
         { label: 'Operations Dashboard', path: '/admin/dashboard' },
-        { label: 'Audit Log & Telemetry', path: '/admin/dashboard' }
+        { label: 'Properties Vetting', path: '/admin/properties' },
+        { label: 'Reservations & Calendar', path: '/admin/reservations' },
+        { label: 'Concierge Dispatch Desk', path: '/admin/concierge' },
+        { label: 'Operations & Housekeeping', path: '/admin/operations' },
+        { label: 'Guests Directory', path: '/admin/guests' },
+        { label: 'Staff & Service Roster', path: '/admin/staff' },
+        { label: 'Payments & Settlement Ledger', path: '/admin/payments' },
+        { label: 'Review Moderation', path: '/admin/reviews' },
+        { label: 'Platform Reports & Analytics', path: '/admin/reports' },
+        { label: 'Settings & RBAC Matrix', path: '/admin/settings' }
       ]
     }
   ];

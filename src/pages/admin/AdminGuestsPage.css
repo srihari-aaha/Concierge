@@ -1,0 +1,160 @@
+.admin-guests-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.guests-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.guest-col-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.guest-table-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.guest-row-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text, #1F2937);
+  display: block;
+}
+
+.member-since {
+  font-size: 0.725rem;
+  color: var(--text-secondary, #6B7280);
+}
+
+.guest-contact-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.775rem;
+  color: #475569;
+}
+
+.guest-contact-cell span {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.guest-city-text {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6B7280);
+}
+
+.stay-count-val {
+  font-size: 0.85rem;
+  color: #1E293B;
+}
+
+.last-stay-tag {
+  font-size: 0.775rem;
+  color: #64748B;
+}
+
+/* Drawer Profile */
+.drawer-guest-profile-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+
+.guest-drawer-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.guest-drawer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.guest-profile-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text, #1F2937);
+  margin: 0;
+}
+
+.guest-profile-sub {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6B7280);
+  margin: 0 0 0.4rem 0;
+}
+
+.guest-pref-note {
+  font-size: 0.8rem;
+  color: #475569;
+  line-height: 1.4;
+  background-color: #FFFFFF;
+  padding: 0.5rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+}
+
+.guest-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.g-stat-box {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  text-align: center;
+}
+
+.g-stat-lbl {
+  font-size: 0.7rem;
+  color: var(--text-secondary, #6B7280);
+}
+
+.g-stat-val {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text, #1F2937);
+}
+
+.section-sub-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text, #1F2937);
+  margin: 0 0 0.6rem 0;
+}
+
+.guest-sub-empty {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6B7280);
+  padding: 1rem 0;
+  text-align: center;
+}
