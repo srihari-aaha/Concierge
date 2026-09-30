@@ -162,7 +162,7 @@
   border: 2px solid #FFFFFF;
 }
 
-/* Avatar Trigger */
+/* Avatar Trigger / Display */
 .admin-avatar-trigger {
   display: flex;
   align-items: center;
@@ -171,13 +171,14 @@
   border-radius: 9999px;
   background-color: #F8FAFC;
   border: 1px solid #E2E8F0;
-  cursor: pointer;
-  transition: all var(--transition-fast);
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
 }
 
-.admin-avatar-trigger:hover {
-  background-color: #FFFFFF;
-  border-color: #CBD5E1;
+.admin-avatar-trigger.admin-avatar-static:hover {
+  background-color: #F8FAFC;
+  border-color: #E2E8F0;
 }
 
 .admin-header-avatar {

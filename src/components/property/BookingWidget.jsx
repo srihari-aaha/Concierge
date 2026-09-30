@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Calendar, Users, ShieldCheck, Sparkles, CheckCircle2, CreditCard, QrCode, Building, ArrowRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import Button from '../common/Button';
@@ -9,7 +9,8 @@ import './BookingWidget.css';
 
 export default function BookingWidget({ property }) {
   const navigate = useNavigate();
-  const { createBooking } = useApp();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { createBooking, isAuthenticated, showToast } = useApp();
 
   // Booking parameters
   const [checkIn, setCheckIn] = useState('2024-11-10');
@@ -29,6 +30,34 @@ export default function BookingWidget({ property }) {
   const [upiId, setUpiId] = useState('traveler@okhdfcbank');
   const [isProcessing, setIsProcessing] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(null);
+
+  // Restore pending reservation configuration saved before login redirect
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem('pending_reservation');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.propertyId === property.id) {
+          if (parsed.checkIn) setCheckIn(parsed.checkIn);
+          if (parsed.checkOut) setCheckOut(parsed.checkOut);
+          if (parsed.guestsCount) setGuestsCount(parsed.guestsCount);
+          if (parsed.selectedAddons) setSelectedAddons(parsed.selectedAddons);
+        }
+        sessionStorage.removeItem('pending_reservation');
+      }
+    } catch (_) {}
+  }, [property.id]);
+
+  // When returning after logging in with ?reserve=true, auto-open the reservation checkout modal
+  useEffect(() => {
+    if (searchParams.get('reserve') === 'true' && isAuthenticated) {
+      setBookingSuccess(null);
+      setCheckoutModalOpen(true);
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('reserve');
+      setSearchParams(newParams, { replace: true });
+    }
+  }, [searchParams, isAuthenticated, setSearchParams]);
 
   // Financial calculations
   const calculateNights = () => {
@@ -250,6 +279,25 @@ export default function BookingWidget({ property }) {
         size="lg"
         fullWidth
         onClick={() => {
+          if (!isAuthenticated) {
+            try {
+              sessionStorage.setItem(
+                'pending_reservation',
+                JSON.stringify({
+                  propertyId: property.id,
+                  checkIn,
+                  checkOut,
+                  guestsCount,
+                  selectedAddons
+                })
+              );
+            } catch (_) {}
+            if (showToast) {
+              showToast('Please sign in to complete your reservation.', 'info');
+            }
+            navigate(`/login?redirect=${encodeURIComponent(`/property/${property.id}?reserve=true`)}`);
+            return;
+          }
           setBookingSuccess(null);
           setCheckoutModalOpen(true);
         }}

@@ -16,10 +16,10 @@
 
 .admin-content-area {
   flex: 1;
-  padding: 1.75rem 2rem 3.5rem;
-  max-width: 1540px;
+  padding: 1.75rem 2.25rem 3.5rem;
+  max-width: 100%;
   width: 100%;
-  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .admin-content-area.no-padding {

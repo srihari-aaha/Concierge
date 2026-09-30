@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
-import { User, Home, Wrench, ShieldCheck, Mail, Lock, Phone, Key, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { User, Home, Wrench, ShieldCheck, Mail, Lock, Phone, Key, AlertCircle, CheckCircle2, Sparkles } from 'lucide-react';
 import Button from '../../components/common/Button';
 import './AuthPage.css';
 
@@ -16,7 +16,7 @@ export const LOGIN_CREDENTIALS = [
     altEmail: 'priya.sharma@example.com',
     password: '123456',
     altPassword: 'guest123',
-    dest: '/guest/dashboard',
+    dest: '/',
     desc: 'Browse villas, booking management, concierge requests',
     icon: User,
     badgeClass: 'badge-guest'
@@ -67,6 +67,8 @@ export const LOGIN_CREDENTIALS = [
 
 export default function AuthPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectUrl = searchParams.get('redirect');
   const { login, register, showToast } = useApp();
 
   const [mode, setMode] = useState('login'); // login, register, forgot
@@ -115,6 +117,10 @@ export default function AuthPage() {
 
     if (mode === 'register' && step === 'verify') {
       register({ name: fullName || 'User', email: emailOrPhone, phone, role: selectedRole });
+      if (redirectUrl) {
+        navigate(redirectUrl);
+        return;
+      }
       const dest =
         selectedRole === 'owner'
           ? '/owner/dashboard'
@@ -168,7 +174,10 @@ export default function AuthPage() {
       }
 
       login(matchedCred.role);
-      const targetDestination = matchedCred.role === 'guest' ? '/' : matchedCred.dest;
+      const isBookingRedirect = redirectUrl && redirectUrl.includes('reserve=true');
+      const targetDestination = matchedCred.role === 'guest'
+        ? (isBookingRedirect ? redirectUrl : '/')
+        : (redirectUrl || matchedCred.dest);
       navigate(targetDestination);
       return;
     }
@@ -176,7 +185,8 @@ export default function AuthPage() {
     // Allow general user if password is at least 6 characters
     if (inputPass.length >= 6) {
       login('guest');
-      navigate('/');
+      const isBookingRedirect = redirectUrl && redirectUrl.includes('reserve=true');
+      navigate(isBookingRedirect ? redirectUrl : '/');
       return;
     }
 
@@ -207,6 +217,27 @@ export default function AuthPage() {
                   ? 'Join StayEase as a Guest, Villa Host, or Service Specialist'
                   : 'Enter your email or mobile to receive recovery instructions'}
             </p>
+            {redirectUrl && (
+              <div
+                className="auth-redirect-banner animate-fade-in"
+                style={{
+                  marginTop: '1rem',
+                  padding: '0.75rem 1rem',
+                  backgroundColor: 'rgba(237, 112, 20, 0.08)',
+                  border: '1px solid rgba(237, 112, 20, 0.3)',
+                  borderRadius: '8px',
+                  color: '#ED7014',
+                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.6rem',
+                  textAlign: 'left'
+                }}
+              >
+                <Sparkles size={16} style={{ flexShrink: 0 }} />
+                <span>Please sign in or register to complete your reservation. You will be redirected right back to confirm your stay.</span>
+              </div>
+            )}
           </div>
 
           {/* Error Message */}

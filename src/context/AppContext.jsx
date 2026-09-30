@@ -16,9 +16,18 @@ const AppContext = createContext(null);
 const STORAGE_KEY = 'stayease_prototype_state_v2';
 
 export function AppProvider({ children }) {
-  // Current active role
+  // Current active role (defaults to 'guest')
   const [currentRole, setCurrentRole] = useState(() => {
-    return localStorage.getItem('stayease_role') || 'guest';
+    return sessionStorage.getItem('stayease_role') || 'guest';
+  });
+
+  // Authentication & session state
+  // Defaults to false so opening the website link always lands on public landing page with no login
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    try {
+      localStorage.removeItem('stayease_auth'); // purge legacy auto-login key
+    } catch (_) {}
+    return sessionStorage.getItem('stayease_auth') === 'true';
   });
 
   // Main interactive collections
@@ -69,10 +78,12 @@ export function AppProvider({ children }) {
 
   const closeToast = () => setToast((prev) => ({ ...prev, visible: false }));
 
-  // Synchronize to localStorage
+  // Synchronize role to sessionStorage only when active
   useEffect(() => {
-    localStorage.setItem('stayease_role', currentRole);
-  }, [currentRole]);
+    if (isAuthenticated) {
+      sessionStorage.setItem('stayease_role', currentRole);
+    }
+  }, [currentRole, isAuthenticated]);
 
   useEffect(() => {
     localStorage.setItem(`${STORAGE_KEY}_properties`, JSON.stringify(properties));
@@ -147,24 +158,27 @@ export function AppProvider({ children }) {
     }
   };
 
-  // Authentication & session state
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('stayease_auth') !== 'false';
-  });
-
   const currentUser = usersByRole[currentRole] || usersByRole.guest;
 
   const login = (role = 'guest') => {
     setCurrentRole(role);
     setIsAuthenticated(true);
-    localStorage.setItem('stayease_auth', 'true');
-    localStorage.setItem('stayease_role', role);
+    sessionStorage.setItem('stayease_auth', 'true');
+    sessionStorage.setItem('stayease_role', role);
+    try {
+      localStorage.removeItem('stayease_auth');
+    } catch (_) {}
     showToast(`Signed in as ${usersByRole[role]?.name} (${role.toUpperCase()})`, 'success');
   };
 
   const logout = () => {
     setIsAuthenticated(false);
-    localStorage.setItem('stayease_auth', 'false');
+    sessionStorage.removeItem('stayease_auth');
+    sessionStorage.removeItem('stayease_role');
+    try {
+      localStorage.removeItem('stayease_auth');
+      localStorage.removeItem('stayease_role');
+    } catch (_) {}
     showToast('You have been signed out of StayEase.', 'info');
   };
 
@@ -172,16 +186,16 @@ export function AppProvider({ children }) {
     const role = userData.role || 'guest';
     setCurrentRole(role);
     setIsAuthenticated(true);
-    localStorage.setItem('stayease_auth', 'true');
-    localStorage.setItem('stayease_role', role);
+    sessionStorage.setItem('stayease_auth', 'true');
+    sessionStorage.setItem('stayease_role', role);
     showToast(`Account registered! Welcome to StayEase, ${userData.name || 'Traveler'}.`, 'success');
   };
 
   const switchRole = (newRole) => {
     setCurrentRole(newRole);
     setIsAuthenticated(true);
-    localStorage.setItem('stayease_auth', 'true');
-    localStorage.setItem('stayease_role', newRole);
+    sessionStorage.setItem('stayease_role', newRole);
+    sessionStorage.setItem('stayease_auth', 'true');
     showToast(`Switched account to ${usersByRole[newRole].name} (${newRole.toUpperCase()})`, 'info');
   };
 

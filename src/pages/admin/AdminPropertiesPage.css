@@ -648,10 +648,20 @@
   gap: 0.35rem;
 }
 
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
 .form-group label {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--text, #1F2937);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .form-group input, .form-group select, .form-group textarea {
@@ -659,6 +669,8 @@
   border: 1px solid var(--border, #E5E7EB);
   border-radius: 8px;
   font-size: 0.85rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-grid-2 {
@@ -669,8 +681,8 @@
 
 .form-grid-4 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
 }
 
 .form-actions-row {

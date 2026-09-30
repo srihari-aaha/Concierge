@@ -15,9 +15,7 @@ import {
   Calendar,
   LogOut,
   ShieldAlert,
-  Search,
   ExternalLink,
-  ChevronRight,
   TrendingUp,
   FileText
 } from 'lucide-react';
@@ -28,6 +26,7 @@ import StatCard from '../../components/admin/StatCard';
 import StatusBadge from '../../components/admin/StatusBadge';
 import PriorityBadge from '../../components/admin/PriorityBadge';
 import Button from '../../components/common/Button';
+import PieChart from '../../components/admin/PieChart';
 import './AdminDashboardPage.css';
 
 export default function AdminDashboardPage() {
@@ -51,10 +50,73 @@ export default function AdminDashboardPage() {
   const openMaintenance = maintenanceTickets.filter(
     (m) => m.status !== 'resolved' && m.status !== 'closed'
   );
-  const failedPayments = paymentTransactions.filter((t) => t.status === 'failed');
 
   const totalRevenue = bookings.reduce((sum, b) => sum + (b.totalAmount || 0), 0) + 792500;
   const activeStaysCount = bookings.filter((b) => b.status === 'confirmed').length + 82;
+
+  // Revenue Streams Breakdown for Interactive Pie Chart
+  const revenueStreamData = [
+    {
+      label: 'Villa Stays',
+      value: 5240000,
+      formattedVal: '₹52.4L',
+      color: '#ED7014',
+      desc: 'Nightly luxury villa rental yield'
+    },
+    {
+      label: 'In-Stay Concierge & Dining',
+      value: 1680000,
+      formattedVal: '₹16.8L',
+      color: '#D97706',
+      desc: 'Private chefs, seafood & fresh groceries'
+    },
+    {
+      label: 'Airport Fleet Transfers',
+      value: 950000,
+      formattedVal: '₹9.5L',
+      color: '#2563EB',
+      desc: 'Chauffeur transit & vehicle hire'
+    },
+    {
+      label: 'Platform Commissions (10%)',
+      value: 570000,
+      formattedVal: '₹5.7L',
+      color: '#10B981',
+      desc: 'StayEase platform fee retained'
+    }
+  ];
+
+  // Regional Performance Breakdown for Interactive Pie Chart
+  const regionalPerformanceData = [
+    {
+      label: 'Goa Coastal Villas',
+      value: 128,
+      formattedVal: '128 stays',
+      color: '#ED7014',
+      desc: 'Candolim, Ashwem & Vagator'
+    },
+    {
+      label: 'Pondicherry Courtyards',
+      value: 70,
+      formattedVal: '70 stays',
+      color: '#8B5CF6',
+      desc: 'White Town heritage mansions'
+    },
+    {
+      label: 'Kerala Backwaters',
+      value: 52,
+      formattedVal: '52 stays',
+      color: '#06B6D4',
+      desc: 'Kumarakom & Alleppey lagoons'
+    },
+    {
+      label: 'Coorg & Nilgiris',
+      value: 41,
+      formattedVal: '41 stays',
+      color: '#10B981',
+      desc: 'Coffee plantation bungalows'
+    }
+  ];
 
   // Format today's date
   const todayFormatted = new Intl.DateTimeFormat('en-IN', {
@@ -83,17 +145,6 @@ export default function AdminDashboardPage() {
 
           <div className="welcome-banner-actions">
             <Button
-              variant="outline"
-              size="sm"
-              icon={Search}
-              onClick={() => {
-                const event = new KeyboardEvent('keydown', { key: 'k', ctrlKey: true });
-                window.dispatchEvent(event);
-              }}
-            >
-              Quick Search (Ctrl+K)
-            </Button>
-            <Button
               variant="primary"
               size="sm"
               icon={Plus}
@@ -104,100 +155,6 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Attention Priority Urgency Strip */}
-        <div className="admin-attention-strip">
-          <div className="attention-header">
-            <div className="attention-title-wrap">
-              <span className="attention-pulse-dot" />
-              <span className="attention-title">What needs your attention right now</span>
-            </div>
-            <span className="attention-count">
-              {pendingApprovals.length + urgentRequests.length + openMaintenance.length + failedPayments.length} pending items
-            </span>
-          </div>
-
-          <div className="attention-cards-grid">
-            {pendingApprovals.length > 0 && (
-              <div
-                className="attention-item-card urgent-border"
-                onClick={() => navigate('/admin/properties?tab=pending')}
-              >
-                <div className="attention-item-icon warning">
-                  <Home size={18} />
-                </div>
-                <div className="attention-item-body">
-                  <div className="attention-item-title">
-                    {pendingApprovals.length} Property Approvals
-                  </div>
-                  <div className="attention-item-desc">
-                    New luxury listings submitted by hosts awaiting quality vetting
-                  </div>
-                </div>
-                <ArrowRight size={16} className="attention-arrow" />
-              </div>
-            )}
-
-            {urgentRequests.length > 0 && (
-              <div
-                className="attention-item-card urgent-border"
-                onClick={() => navigate('/admin/concierge?tab=pending')}
-              >
-                <div className="attention-item-icon danger">
-                  <Sparkles size={18} />
-                </div>
-                <div className="attention-item-body">
-                  <div className="attention-item-title">
-                    {urgentRequests.length} Concierge Requests
-                  </div>
-                  <div className="attention-item-desc">
-                    Airport transfers and chef bookings requiring staff dispatch
-                  </div>
-                </div>
-                <ArrowRight size={16} className="attention-arrow" />
-              </div>
-            )}
-
-            {openMaintenance.length > 0 && (
-              <div
-                className="attention-item-card"
-                onClick={() => navigate('/admin/operations?tab=maintenance')}
-              >
-                <div className="attention-item-icon info">
-                  <Wrench size={18} />
-                </div>
-                <div className="attention-item-body">
-                  <div className="attention-item-title">
-                    {openMaintenance.length} Open Maintenance Issues
-                  </div>
-                  <div className="attention-item-desc">
-                    Villa AC and pool pump issues awaiting technician resolution
-                  </div>
-                </div>
-                <ArrowRight size={16} className="attention-arrow" />
-              </div>
-            )}
-
-            {failedPayments.length > 0 && (
-              <div
-                className="attention-item-card"
-                onClick={() => navigate('/admin/payments?tab=failed')}
-              >
-                <div className="attention-item-icon danger">
-                  <ShieldAlert size={18} />
-                </div>
-                <div className="attention-item-body">
-                  <div className="attention-item-title">
-                    {failedPayments.length} Payment Authorization Alert
-                  </div>
-                  <div className="attention-item-desc">
-                    Failed UPI/Card gateway checkout needing retry link
-                  </div>
-                </div>
-                <ArrowRight size={16} className="attention-arrow" />
-              </div>
-            )}
-          </div>
-        </div>
 
         {/* High-Level SaaS Operational KPI Cards */}
         <div className="admin-kpi-grid">
@@ -225,27 +182,6 @@ export default function AdminDashboardPage() {
             onClick={() => navigate('/admin/reservations')}
           />
 
-          <StatCard
-            label="Today's Check-ins"
-            value="24"
-            subtitle="18 verified digital keys generated"
-            contextText="Peak arrival: 2 PM - 5 PM"
-            icon={Users}
-            iconBg="#ECFDF5"
-            iconColor="#10B981"
-            onClick={() => navigate('/admin/operations?tab=checkins')}
-          />
-
-          <StatCard
-            label="Today's Check-outs"
-            value="18"
-            subtitle="15 room turnovers scheduled"
-            contextText="3 late checkout requests"
-            icon={Clock}
-            iconBg="#F5F3FF"
-            iconColor="#8B5CF6"
-            onClick={() => navigate('/admin/operations?tab=housekeeping')}
-          />
 
           <StatCard
             label="Concierge Requests"
@@ -272,62 +208,47 @@ export default function AdminDashboardPage() {
           />
         </div>
 
-        {/* Section 8: Today's Operations Visual Summary */}
-        <div className="todays-ops-section">
-          <div className="section-head-bar">
-            <div>
-              <h2 className="section-title-sm">Today's Operations</h2>
-              <p className="section-desc-sm">Live dispatch ledger and housekeeping turnaround metrics</p>
+        {/* Section: Interactive Revenue & Performance Pie Charts */}
+        <div className="dashboard-charts-grid">
+          {/* Revenue Distribution Card */}
+          <div className="dashboard-analytics-card">
+            <div className="analytics-card-header">
+              <div>
+                <div className="analytics-badge-tag">FINANCIAL REVENUE STREAMS</div>
+                <h3 className="analytics-card-title">Revenue by Stream</h3>
+                <p className="analytics-card-desc">Gross booking yields, concierge add-ons, and platform commissions</p>
+              </div>
+              <span className="analytics-growth-chip">
+                <TrendingUp size={13} /> +14.2% MoM
+              </span>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              icon={ChevronRight}
-              iconPosition="right"
-              onClick={() => navigate('/admin/operations')}
-            >
-              Full Operations Console
-            </Button>
+            <PieChart
+              data={revenueStreamData}
+              centerValue={`₹${(totalRevenue / 100000).toFixed(1)}L`}
+              centerLabel="Total Volume"
+            />
           </div>
 
-          <div className="ops-pills-row">
-            <div className="ops-stat-pill" onClick={() => navigate('/admin/operations?tab=checkins')}>
-              <span className="pill-metric">24</span>
-              <span className="pill-name">Check-ins</span>
-              <span className="pill-tag good">On Schedule</span>
+          {/* Regional Booking Performance Card */}
+          <div className="dashboard-analytics-card">
+            <div className="analytics-card-header">
+              <div>
+                <div className="analytics-badge-tag">REGIONAL OCCUPANCY & YIELD</div>
+                <h3 className="analytics-card-title">Destination Performance</h3>
+                <p className="analytics-card-desc">Active reservation density and guest bookings across top corridors</p>
+              </div>
+              <span className="analytics-growth-chip positive">
+                <CheckCircle2 size={13} /> 94% Occupancy
+              </span>
             </div>
-
-            <div className="ops-stat-pill" onClick={() => navigate('/admin/operations?tab=checkins')}>
-              <span className="pill-metric">18</span>
-              <span className="pill-name">Check-outs</span>
-              <span className="pill-tag good">12 Completed</span>
-            </div>
-
-            <div className="ops-stat-pill" onClick={() => navigate('/admin/operations?tab=housekeeping')}>
-              <span className="pill-metric">12</span>
-              <span className="pill-name">Housekeeping Pending</span>
-              <span className="pill-tag warning">Turnovers Active</span>
-            </div>
-
-            <div className="ops-stat-pill" onClick={() => navigate('/admin/operations?tab=maintenance')}>
-              <span className="pill-metric">{openMaintenance.length || 5}</span>
-              <span className="pill-name">Maintenance Open</span>
-              <span className="pill-tag alert">Technicians Dispatched</span>
-            </div>
-
-            <div className="ops-stat-pill" onClick={() => navigate('/admin/concierge')}>
-              <span className="pill-metric">37</span>
-              <span className="pill-name">Concierge Requests</span>
-              <span className="pill-tag info">Fleet Engaged</span>
-            </div>
-
-            <div className="ops-stat-pill" onClick={() => navigate('/admin/operations?tab=checkins')}>
-              <span className="pill-metric">3</span>
-              <span className="pill-name">Late Check-outs</span>
-              <span className="pill-tag neutral">Approved Until 2 PM</span>
-            </div>
+            <PieChart
+              data={regionalPerformanceData}
+              centerValue={`${activeStaysCount + 209}`}
+              centerLabel="Active Stays"
+            />
           </div>
         </div>
+
 
         {/* Dual Operational Panels: Activity vs Live Ledger */}
         <div className="dashboard-ledger-grid">

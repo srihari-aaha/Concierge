@@ -5,12 +5,26 @@ import MobileBottomNav from './MobileBottomNav';
 import './DashboardLayout.css';
 
 export default function DashboardLayout({ title, subtitle, children, noPadding }) {
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
+    return localStorage.getItem('stayease_dashboard_sidebar_collapsed') === 'true';
+  });
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
+  const toggleSidebarCollapse = () => {
+    setIsSidebarCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem('stayease_dashboard_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
+
   return (
-    <div className="dashboard-layout">
+    <div className={`dashboard-layout ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       {/* Sidebar for desktop */}
-      <DashboardSidebar />
+      <DashboardSidebar
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={toggleSidebarCollapse}
+      />
 
       {/* Mobile drawer overlay for sidebar */}
       {mobileNavOpen && (
@@ -22,7 +36,11 @@ export default function DashboardLayout({ title, subtitle, children, noPadding }
             className="dashboard-mobile-drawer-content"
             onClick={(e) => e.stopPropagation()}
           >
-            <DashboardSidebar />
+            <DashboardSidebar
+              isCollapsed={false}
+              isMobileOpen={true}
+              onCloseMobile={() => setMobileNavOpen(false)}
+            />
           </div>
         </div>
       )}

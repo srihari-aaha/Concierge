@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -17,15 +17,51 @@ import {
   ArrowLeft,
   Briefcase,
   LogOut,
-  User
+  User,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import Badge from '../common/Badge';
 import './DashboardSidebar.css';
 
-export default function DashboardSidebar() {
+export default function DashboardSidebar({
+  isCollapsed: controlledCollapsed,
+  onToggleCollapse: controlledToggle,
+  isMobileOpen = false,
+  onCloseMobile
+}) {
   const { currentRole, currentUser, stats, logout } = useApp();
   const navigate = useNavigate();
+
+  // Handle internal state if not controlled by parent layout
+  const [internalCollapsed, setInternalCollapsed] = useState(() => {
+    return localStorage.getItem('stayease_dashboard_sidebar_collapsed') === 'true';
+  });
+
+  const isCollapsed = isMobileOpen
+    ? false
+    : controlledCollapsed !== undefined
+    ? controlledCollapsed
+    : internalCollapsed;
+
+  const handleToggleCollapse = () => {
+    if (controlledToggle) {
+      controlledToggle();
+    } else {
+      setInternalCollapsed((prev) => {
+        const next = !prev;
+        localStorage.setItem('stayease_dashboard_sidebar_collapsed', String(next));
+        return next;
+      });
+    }
+  };
+
+  const handleLinkClick = () => {
+    if (isMobileOpen && onCloseMobile) {
+      onCloseMobile();
+    }
+  };
 
   const getProfilePath = () => {
     switch (currentRole) {
@@ -77,7 +113,6 @@ export default function DashboardSidebar() {
   const adminNav = [
     { label: 'Operations Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { label: 'Properties', path: '/admin/properties', icon: Home, badge: stats.adminPendingApprovals, badgeVariant: 'urgent' },
-    { label: 'Operations', path: '/admin/operations', icon: Wrench },
     { label: 'Owner Directory', path: '/admin/owners', icon: Users },
     { label: 'Staff Roster', path: '/admin/staff', icon: Briefcase },
     { label: 'Platform Reports', path: '/admin/reports', icon: ShieldCheck },
@@ -100,60 +135,91 @@ export default function DashboardSidebar() {
   const navItems = getNavItems();
 
   return (
-    <aside className="dashboard-sidebar">
+    <aside className={`dashboard-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+      {/* Brand Header */}
       <div className="sidebar-brand-wrapper">
-        <Link to="/" className="sidebar-brand">
-          <svg viewBox="0 0 32 32" width="24" height="24" fill="none">
-            <rect width="32" height="32" rx="8" fill="#ED7014" />
-            <path d="M16 7 C10 14 9 21 16 26 C23 21 22 14 16 7 Z" fill="#FFFFFF" />
-            <path d="M16 11 L16 23" stroke="#ED7014" strokeWidth="1.8" strokeLinecap="round" />
-          </svg>
-          <div className="sidebar-brand-text">
-            <span className="sidebar-title">StayEase</span>
-            <span className="sidebar-portal-tag">{currentRole.toUpperCase()} PORTAL</span>
+        <Link to="/" className="sidebar-brand" onClick={handleLinkClick}>
+          <div className="sidebar-brand-icon">
+            <svg viewBox="0 0 32 32" width="24" height="24" fill="none">
+              <rect width="32" height="32" rx="8" fill="#ED7014" />
+              <path d="M16 7 C10 14 9 21 16 26 C23 21 22 14 16 7 Z" fill="#FFFFFF" />
+              <path d="M16 11 L16 23" stroke="#ED7014" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
           </div>
+          {!isCollapsed && (
+            <div className="sidebar-brand-text">
+              <span className="sidebar-title">StayEase</span>
+              <span className="sidebar-portal-tag">{currentRole.toUpperCase()} PORTAL</span>
+            </div>
+          )}
         </Link>
+
+        {/* Desktop Collapse Toggle */}
+        <button
+          type="button"
+          className="dashboard-collapse-toggle"
+          onClick={handleToggleCollapse}
+          title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+          aria-label={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+        >
+          {isCollapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
+        </button>
       </div>
 
       {/* User profile card */}
-      <Link to={profilePath} className="sidebar-user-card" title="View Profile">
+      <Link
+        to={profilePath}
+        className="sidebar-user-card"
+        title={isCollapsed ? `View Profile - ${currentUser.name}` : 'View Profile'}
+        onClick={handleLinkClick}
+      >
         <img src={currentUser.avatar} alt={currentUser.name} className="sidebar-user-avatar" />
-        <div className="sidebar-user-info">
-          <div className="sidebar-user-name">{currentUser.name}</div>
-          <div className="sidebar-user-role">{currentUser.city || currentUser.company || 'India'}</div>
-        </div>
+        {!isCollapsed && (
+          <div className="sidebar-user-info">
+            <div className="sidebar-user-name">{currentUser.name}</div>
+            <div className="sidebar-user-role">{currentUser.city || currentUser.company || 'India'}</div>
+          </div>
+        )}
       </Link>
 
-      {/* Navigation Links */}
-      <nav className="sidebar-nav">
-        <div className="sidebar-nav-label">MAIN NAVIGATION</div>
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `sidebar-link ${isActive ? 'active' : ''}`
-              }
-            >
-              <Icon size={18} className="sidebar-icon" />
-              <span className="sidebar-link-text">{item.label}</span>
-              {item.badge !== undefined && item.badge !== null && item.badge > 0 && (
-                <Badge
-                  variant={item.badgeVariant || 'sage'}
-                  size="sm"
-                  className="sidebar-badge"
-                >
-                  {item.badge}
-                </Badge>
-              )}
-            </NavLink>
-          );
-        })}
-      </nav>
+      {/* Scrollable Navigation Area */}
+      <div className="sidebar-nav-scroll">
+        <nav className="sidebar-nav">
+          {!isCollapsed && <div className="sidebar-nav-label">MAIN NAVIGATION</div>}
+          {isCollapsed && <div className="sidebar-nav-divider" />}
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                onClick={handleLinkClick}
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? 'active' : ''}`
+                }
+                title={isCollapsed ? item.label : undefined}
+              >
+                <Icon size={18} className="sidebar-icon" />
+                {!isCollapsed && <span className="sidebar-link-text">{item.label}</span>}
+                {item.badge !== undefined && item.badge !== null && item.badge > 0 && !isCollapsed && (
+                  <Badge
+                    variant={item.badgeVariant || 'sage'}
+                    size="sm"
+                    className="sidebar-badge"
+                  >
+                    {item.badge}
+                  </Badge>
+                )}
+                {item.badge !== undefined && item.badge !== null && item.badge > 0 && isCollapsed && (
+                  <span className={`sidebar-dot-badge badge-${item.badgeVariant || 'sage'}`} />
+                )}
+              </NavLink>
+            );
+          })}
+        </nav>
+      </div>
 
-      {/* Bottom footer: back link + logout */}
+      {/* Bottom footer: logout */}
       <div className="sidebar-footer">
         <button
           className="sidebar-logout-btn"
@@ -161,9 +227,11 @@ export default function DashboardSidebar() {
             logout();
             navigate('/');
           }}
+          title={isCollapsed ? 'Log Out' : undefined}
+          aria-label="Log Out"
         >
-          <LogOut size={15} />
-          <span>Log Out</span>
+          <LogOut size={16} />
+          {!isCollapsed && <span>Log Out</span>}
         </button>
       </div>
     </aside>

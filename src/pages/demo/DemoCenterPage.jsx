@@ -35,7 +35,7 @@ export default function DemoCenterPage() {
       desc: 'Guest with active upcoming reservation STY-2024-00124 at Palm Grove Retreat, Candolim Goa.',
       icon: User,
       badge: 'Guest Role',
-      defaultPath: '/guest/dashboard',
+      defaultPath: '/',
       subLinks: [
         { label: 'My Stay (Keyless & Wi-Fi)', path: '/guest/stay' },
         { label: 'Reservations', path: '/guest/bookings' },

@@ -2,6 +2,46 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 100%;
+}
+
+.admin-owners-page .admin-table-container {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid var(--border, #E5E7EB);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  overflow-x: auto;
+}
+
+.admin-owners-page .admin-data-table {
+  width: 100%;
+  min-width: 100%;
+  table-layout: auto;
+}
+
+.admin-owners-page .admin-data-table th {
+  padding: 0.85rem 1.1rem;
+  white-space: nowrap;
+}
+
+.admin-owners-page .admin-data-table td {
+  padding: 0.95rem 1.1rem;
+}
+
+.admin-owners-page .admin-data-table th:last-child,
+.admin-owners-page .admin-data-table td:last-child {
+  min-width: 220px;
+  text-align: right;
+  padding-right: 1.5rem;
+}
+
+.admin-owners-page .table-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
 }
 
 .owners-filter-bar {

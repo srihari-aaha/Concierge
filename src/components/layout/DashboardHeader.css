@@ -45,31 +45,6 @@
   gap: 1.25rem;
 }
 
-/* Header Stay Pill */
-.header-stay-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: var(--primary-tint);
-  border: 1px solid rgba(237, 112, 20, 0.25);
-  padding: 0.4rem 0.85rem;
-  border-radius: var(--radius-full);
-  font-size: 0.8rem;
-  color: var(--primary-dark);
-  transition: all var(--transition-fast);
-}
-
-.header-stay-pill:hover {
-  background-color: #FFE6D6;
-}
-
-.stay-pulse-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: var(--primary);
-  animation: pulseGently 2s infinite;
-}
 
 /* Icon Buttons & Notif Dropdown */
 .header-notif-wrapper {
@@ -202,24 +177,17 @@
   color: var(--text-muted);
 }
 
-/* User Profile Mini */
+/* User Profile Mini (Disabled / Non-clickable across all logins) */
 .header-profile {
   display: flex;
   align-items: center;
   gap: 0.65rem;
   text-decoration: none;
-  cursor: pointer;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
   padding: 0.25rem 0.6rem 0.25rem 0.25rem;
   border-radius: var(--radius-full);
-  transition: all var(--transition-fast);
-}
-
-.header-profile:hover {
-  background-color: var(--surface-warm);
-}
-
-.header-profile:hover .header-user-name {
-  color: var(--primary);
 }
 
 .header-avatar {

@@ -151,16 +151,11 @@ export default function PublicNavbar() {
         {/* Right Action Cluster */}
         <div className="nav-actions-cluster">
           {!isAuthenticated ? (
-            <>
-              <Link to="/login" className="login-link-btn">
-               <span style={{color:"#ED7014"}}> Login / Register</span>
-              </Link>
-              {/* <Link to="/register?role=owner">
-                <Button variant="outline" size="sm">
-                  List Your Property
-                </Button>
-              </Link> */}
-            </>
+            <Link to="/login">
+              <Button variant="primary" size="sm">
+                Login / Register
+              </Button>
+            </Link>
           ) : (
             <div className="profile-menu-container" ref={dropdownRef}>
               <button
@@ -389,22 +384,13 @@ export default function PublicNavbar() {
               <div className="mobile-drawer-divider" />
 
               {!isAuthenticated ? (
-                <>
-                  <Link
-                    to="/login"
-                    className="mobile-drawer-link"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Login
-                  </Link>
-                  {/* <Link
-                    to="/register?role=owner"
-                    className="mobile-drawer-link"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    List Your Property
-                  </Link> */}
-                </>
+                <Link
+                  to="/login"
+                  className="mobile-drawer-link"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Login / Register
+                </Link>
               ) : (
                 <>
                   <Link

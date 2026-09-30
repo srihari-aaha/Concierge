@@ -3,7 +3,6 @@ import { NavLink, Link, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Home,
-  Wrench,
   Users,
   UserCheck,
   CreditCard,
@@ -23,14 +22,11 @@ import './AdminSidebar.css';
 
 export default function AdminSidebar({ isCollapsed, onToggleCollapse, isMobileOpen, onCloseMobile }) {
   const { currentUser, properties, conciergeRequests, maintenanceTickets, notifications, logout } = useApp();
-  const { currentAdminRoleKey, activeRoleConfig, housekeepingTasks, paymentTransactions } = useAdmin();
+  const { currentAdminRoleKey, activeRoleConfig, paymentTransactions } = useAdmin();
   const navigate = useNavigate();
 
   // Action badge counts
   const pendingApprovalsCount = properties.filter((p) => p.status === 'pending_approval').length;
-  const openOperationsCount =
-    housekeepingTasks.filter((t) => t.status === 'pending' || t.status === 'cleaning').length +
-    maintenanceTickets.filter((m) => m.status !== 'resolved' && m.status !== 'closed').length;
   const unreadNotifsCount = notifications.filter((n) => !n.read).length;
   const failedPaymentsCount = paymentTransactions.filter((t) => t.status === 'failed' || t.status === 'disputed').length;
 
@@ -45,13 +41,6 @@ export default function AdminSidebar({ isCollapsed, onToggleCollapse, isMobileOp
           icon: Home,
           badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : null,
           badgeVariant: 'urgent'
-        },
-        {
-          label: 'Operations',
-          path: '/admin/operations',
-          icon: Wrench,
-          badge: openOperationsCount > 0 ? openOperationsCount : null,
-          badgeVariant: 'warning'
         }
       ]
     },
@@ -191,7 +180,7 @@ export default function AdminSidebar({ isCollapsed, onToggleCollapse, isMobileOp
           className="admin-logout-button"
           onClick={() => {
             logout();
-            navigate('/login');
+            navigate('/');
           }}
           title="Sign out of StayEase Admin"
           aria-label="Sign out"

@@ -852,7 +852,7 @@ export default function AdminPropertiesPage() {
           onClose={() => setIsAddModalOpen(false)}
           title="Add New StayEase Holiday Property"
           subtitle="Register an Indian luxury villa, homestay, or heritage estate on the platform"
-          maxWidth="640px"
+          maxWidth="820px"
         >
           <form onSubmit={handleCreatePropertySubmit} className="add-prop-form">
             <div className="form-group">

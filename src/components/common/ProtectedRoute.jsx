@@ -7,7 +7,7 @@ export default function ProtectedRoute({ allowedRole, children }) {
   const location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (allowedRole && currentRole !== allowedRole) {

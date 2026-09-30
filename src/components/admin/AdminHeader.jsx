@@ -4,27 +4,16 @@ import {
   Search,
   Bell,
   HelpCircle,
-  Menu,
-  ChevronDown,
-  User,
-  Settings,
-  ShieldCheck,
-  CheckCircle,
-  ExternalLink,
-  LogOut
+  Menu
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useAdmin } from '../../context/AdminContext';
 import './AdminHeader.css';
 
 export default function AdminHeader({ onOpenSearch, onToggleMobileNav }) {
-  const { currentUser, notifications, markNotificationAsRead, markAllNotificationsAsRead, logout } = useApp();
-  const { currentAdminRoleKey, setCurrentAdminRoleKey, rbacRoles, activeRoleConfig } = useAdmin();
+  const { currentUser, notifications, markNotificationAsRead, markAllNotificationsAsRead } = useApp();
   const [showNotifs, setShowNotifs] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showRoleMenu, setShowRoleMenu] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
-  const navigate = useNavigate();
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -58,52 +47,7 @@ export default function AdminHeader({ onOpenSearch, onToggleMobileNav }) {
 
       {/* Right Controls */}
       <div className="admin-header-right">
-        {/* RBAC Role Simulator Dropdown */}
-        <div className="header-dropdown-wrap">
-          <button
-            type="button"
-            className="admin-role-badge-btn"
-            onClick={() => {
-              setShowRoleMenu(!showRoleMenu);
-              setShowNotifs(false);
-              setShowUserMenu(false);
-            }}
-            title="Simulate Role (RBAC)"
-          >
-            <ShieldCheck size={14} className="role-shield-icon" />
-            <span className="role-btn-name">{activeRoleConfig.name}</span>
-            <ChevronDown size={13} />
-          </button>
 
-          {showRoleMenu && (
-            <div className="admin-menu-dropdown animate-fade-in role-dropdown">
-              <div className="dropdown-section-title">
-                <span>SIMULATE RBAC ROLE</span>
-              </div>
-              <div className="role-options-list">
-                {rbacRoles.map((role) => (
-                  <button
-                    key={role.roleKey}
-                    type="button"
-                    className={`role-select-item ${role.roleKey === currentAdminRoleKey ? 'active' : ''}`}
-                    onClick={() => {
-                      setCurrentAdminRoleKey(role.roleKey);
-                      setShowRoleMenu(false);
-                    }}
-                  >
-                    <div className="role-select-info">
-                      <span className="role-title">{role.name}</span>
-                      <span className="role-desc">{role.description}</span>
-                    </div>
-                    {role.roleKey === currentAdminRoleKey && (
-                      <CheckCircle size={15} className="role-check-icon" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
 
         {/* Notifications Bell */}
         <div className="header-dropdown-wrap">
@@ -112,7 +56,6 @@ export default function AdminHeader({ onOpenSearch, onToggleMobileNav }) {
             className="admin-header-icon-btn"
             onClick={() => {
               setShowNotifs(!showNotifs);
-              setShowRoleMenu(false);
               setShowUserMenu(false);
             }}
             aria-label="View notifications"
@@ -181,68 +124,10 @@ export default function AdminHeader({ onOpenSearch, onToggleMobileNav }) {
           <HelpCircle size={18} />
         </button>
 
-        {/* User Profile Dropdown */}
-        <div className="header-dropdown-wrap">
-          <button
-            type="button"
-            className="admin-avatar-trigger"
-            onClick={() => {
-              setShowUserMenu(!showUserMenu);
-              setShowNotifs(false);
-              setShowRoleMenu(false);
-            }}
-          >
-            <img src={currentUser.avatar} alt={currentUser.name} className="admin-header-avatar" />
-            <span className="admin-header-name">{currentUser.name.split(' ')[0]}</span>
-            <ChevronDown size={13} className="avatar-chevron" />
-          </button>
-
-          {showUserMenu && (
-            <div className="admin-menu-dropdown animate-fade-in user-dropdown-panel">
-              <div className="user-dropdown-meta">
-                <span className="user-full-name">{currentUser.name}</span>
-                <span className="user-email-text">{currentUser.email}</span>
-                <span className="user-role-badge">{activeRoleConfig.name}</span>
-              </div>
-
-              <div className="user-dropdown-links">
-                <Link
-                  to="/admin/profile"
-                  className="user-menu-item"
-                  onClick={() => setShowUserMenu(false)}
-                >
-                  <User size={15} /> My Admin Profile
-                </Link>
-                <Link
-                  to="/admin/settings"
-                  className="user-menu-item"
-                  onClick={() => setShowUserMenu(false)}
-                >
-                  <Settings size={15} /> System Settings
-                </Link>
-                <Link
-                  to="/"
-                  className="user-menu-item"
-                  onClick={() => setShowUserMenu(false)}
-                >
-                  <ExternalLink size={15} /> View Guest Marketplace
-                </Link>
-              </div>
-
-              <div className="user-dropdown-divider" />
-
-              <button
-                type="button"
-                className="user-menu-item logout"
-                onClick={() => {
-                  logout();
-                  navigate('/login');
-                }}
-              >
-                <LogOut size={15} /> Log Out
-              </button>
-            </div>
-          )}
+        {/* User Profile (Static display across logins) */}
+        <div className="admin-avatar-trigger admin-avatar-static" aria-disabled="true">
+          <img src={currentUser.avatar} alt={currentUser.name} className="admin-header-avatar" />
+          <span className="admin-header-name">{currentUser.name.split(' ')[0]}</span>
         </div>
       </div>
 

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, Check, Sparkles, User, ExternalLink, Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Bell, Menu } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import Badge from '../common/Badge';
 import './DashboardHeader.css';
@@ -14,21 +13,6 @@ export default function DashboardHeader({ title, subtitle, onToggleMobileNav }) 
     (n) => n.userId === currentUser.id || n.role === currentRole
   );
   const unreadCount = userNotifs.filter((n) => !n.read).length;
-
-  const getProfilePath = () => {
-    switch (currentRole) {
-      case 'owner':
-        return '/owner/profile';
-      case 'provider':
-        return '/provider/profile';
-      case 'admin':
-        return '/admin/profile';
-      default:
-        return '/guest/profile';
-    }
-  };
-
-  const profilePath = getProfilePath();
 
   return (
     <header className="dashboard-header">
@@ -50,14 +34,6 @@ export default function DashboardHeader({ title, subtitle, onToggleMobileNav }) 
       </div>
 
       <div className="dashboard-header-right">
-        {/* Active stay badge for Guest */}
-        {currentRole === 'guest' && (
-          <Link to="/guest/my-stay" className="header-stay-pill">
-            <span className="stay-pulse-dot" />
-            <span className="stay-pill-text">Upcoming: <strong>Palm Grove Villa</strong></span>
-          </Link>
-        )}
-
         {/* Notifications Bell */}
         <div className="header-notif-wrapper">
           <button
@@ -112,14 +88,14 @@ export default function DashboardHeader({ title, subtitle, onToggleMobileNav }) 
           )}
         </div>
 
-        {/* User Mini Profile */}
-        <Link to={profilePath} className="header-profile" title="View Profile">
+        {/* User Mini Profile (Static display across logins) */}
+        <div className="header-profile header-profile-static" aria-disabled="true">
           <img src={currentUser.avatar} alt={currentUser.name} className="header-avatar" />
           <div className="header-profile-text">
             <span className="header-user-name">{currentUser.name}</span>
             <span className="header-user-role">{currentRole.toUpperCase()}</span>
           </div>
-        </Link>
+        </div>
       </div>
     </header>
   );
