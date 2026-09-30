@@ -113,12 +113,10 @@ export default function AdminSidebar({ isCollapsed, onToggleCollapse, isMobileOp
         </button>
       </div>
 
-      {/* User profile card (Above navigation, matching other portals) */}
-      <Link
-        to="/admin/profile"
+      {/* User profile card (Static display) */}
+      <div
         className="admin-user-card"
-        title={`View Profile - ${currentUser.name} (${activeRoleConfig.name})`}
-        onClick={handleLinkClick}
+        aria-disabled="true"
       >
         <img
           src={currentUser.avatar}
@@ -131,7 +129,7 @@ export default function AdminSidebar({ isCollapsed, onToggleCollapse, isMobileOp
             <span className="admin-role-tag">{activeRoleConfig.name}</span>
           </div>
         )}
-      </Link>
+      </div>
 
       {/* Nav List */}
       <div className="admin-sidebar-scroll">

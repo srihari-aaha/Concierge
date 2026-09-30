@@ -166,12 +166,10 @@ export default function DashboardSidebar({
         </button>
       </div>
 
-      {/* User profile card */}
-      <Link
-        to={profilePath}
+      {/* User profile card (Static display) */}
+      <div
         className="sidebar-user-card"
-        title={isCollapsed ? `View Profile - ${currentUser.name}` : 'View Profile'}
-        onClick={handleLinkClick}
+        aria-disabled="true"
       >
         <img src={currentUser.avatar} alt={currentUser.name} className="sidebar-user-avatar" />
         {!isCollapsed && (
@@ -180,7 +178,7 @@ export default function DashboardSidebar({
             <div className="sidebar-user-role">{currentUser.city || currentUser.company || 'India'}</div>
           </div>
         )}
-      </Link>
+      </div>
 
       {/* Scrollable Navigation Area */}
       <div className="sidebar-nav-scroll">

@@ -237,7 +237,7 @@
 }
 
 /* Footer */
-/* User Card (Above navigation, matching other portals) */
+/* User Card (Static info display) */
 .admin-user-card {
   display: flex;
   align-items: center;
@@ -248,16 +248,10 @@
   border-radius: var(--radius-md, 10px);
   border: 1px solid var(--border-light, #E5E7EB);
   text-decoration: none;
-  cursor: pointer;
-  transition: all var(--transition-fast, 180ms ease);
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
   flex-shrink: 0;
-}
-
-.admin-user-card:hover {
-  background-color: rgba(237, 112, 20, 0.08);
-  border-color: rgba(237, 112, 20, 0.35);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-  transform: translateY(-1px);
 }
 
 .admin-sidebar.collapsed .admin-user-card {
@@ -291,10 +285,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   transition: color 150ms ease;
-}
-
-.admin-user-card:hover .admin-user-name {
-  color: var(--primary, #ED7014);
 }
 
 .admin-role-tag {
