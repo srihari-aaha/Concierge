@@ -55,18 +55,6 @@ export default function AdminProfilePage() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <img
-              src={currentUser?.avatar}
-              alt={formData.name}
-              style={{
-                width: '54px',
-                height: '54px',
-                borderRadius: '50%',
-                objectFit: 'cover',
-                border: '2px solid #ffffff',
-                boxShadow: 'var(--shadow-xs)'
-              }}
-            />
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>

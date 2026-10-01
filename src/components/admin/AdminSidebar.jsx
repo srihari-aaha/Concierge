@@ -114,22 +114,17 @@ export default function AdminSidebar({ isCollapsed, onToggleCollapse, isMobileOp
       </div>
 
       {/* User profile card (Static display) */}
-      <div
-        className="admin-user-card"
-        aria-disabled="true"
-      >
-        <img
-          src={currentUser.avatar}
-          alt={currentUser.name}
-          className="admin-user-avatar"
-        />
-        {!isCollapsed && (
+      {!isCollapsed && (
+        <div
+          className="admin-user-card"
+          aria-disabled="true"
+        >
           <div className="admin-user-meta">
             <span className="admin-user-name">{currentUser.name}</span>
             <span className="admin-role-tag">{activeRoleConfig.name}</span>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Nav List */}
       <div className="admin-sidebar-scroll">

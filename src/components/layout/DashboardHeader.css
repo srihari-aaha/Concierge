@@ -186,7 +186,7 @@
   cursor: default;
   pointer-events: none;
   user-select: none;
-  padding: 0.25rem 0.6rem 0.25rem 0.25rem;
+  padding: 0.35rem 0.75rem;
   border-radius: var(--radius-full);
 }
 

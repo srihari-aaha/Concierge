@@ -54,22 +54,6 @@ export default function GuestProfilePage() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div
-              style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '50%',
-                background: 'var(--color-primary)',
-                color: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '1.25rem',
-                fontWeight: 700
-              }}
-            >
-              PS
-            </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--text)' }}>

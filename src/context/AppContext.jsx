@@ -121,7 +121,6 @@ export function AppProvider({ children }) {
       role: 'guest',
       email: 'guest@stayease.in',
       altEmail: 'priya.sharma@example.com',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
       phone: '+91 98201 55678',
       city: 'Bengaluru'
     },
@@ -131,7 +130,6 @@ export function AppProvider({ children }) {
       role: 'owner',
       email: 'owner@stayease.in',
       altEmail: 'vikram.singhania@example.com',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
       phone: '+91 98221 88390',
       city: 'Goa'
     },
@@ -142,7 +140,6 @@ export function AppProvider({ children }) {
       company: 'Coastal Mobility & Express Maintenance',
       email: 'provider@stayease.in',
       altEmail: 'ramesh.kumar@coastalmobility.in',
-      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80',
       phone: '+91 98221 44021',
       city: 'Goa'
     },
@@ -152,7 +149,6 @@ export function AppProvider({ children }) {
       role: 'admin',
       email: 'admin@stayease.in',
       altEmail: 'admin@stayease.com',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
       phone: '+91 98190 00122',
       city: 'Mumbai'
     }
@@ -503,7 +499,7 @@ export function AppProvider({ children }) {
       id: `prop-${Date.now()}`,
       ownerId: currentUser.id,
       ownerName: currentUser.name,
-      ownerAvatar: currentUser.avatar,
+      ownerAvatar: currentUser.avatar || '',
       ownerSuperhost: false,
       rating: 5.0,
       reviewsCount: 0,

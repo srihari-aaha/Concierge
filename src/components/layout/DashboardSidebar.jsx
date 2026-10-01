@@ -167,18 +167,17 @@ export default function DashboardSidebar({
       </div>
 
       {/* User profile card (Static display) */}
-      <div
-        className="sidebar-user-card"
-        aria-disabled="true"
-      >
-        <img src={currentUser.avatar} alt={currentUser.name} className="sidebar-user-avatar" />
-        {!isCollapsed && (
+      {!isCollapsed && (
+        <div
+          className="sidebar-user-card"
+          aria-disabled="true"
+        >
           <div className="sidebar-user-info">
             <div className="sidebar-user-name">{currentUser.name}</div>
             <div className="sidebar-user-role">{currentUser.city || currentUser.company || 'India'}</div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Scrollable Navigation Area */}
       <div className="sidebar-nav-scroll">

@@ -90,7 +90,6 @@ export default function DashboardHeader({ title, subtitle, onToggleMobileNav }) 
 
         {/* User Mini Profile (Static display across logins) */}
         <div className="header-profile header-profile-static" aria-disabled="true">
-          <img src={currentUser.avatar} alt={currentUser.name} className="header-avatar" />
           <div className="header-profile-text">
             <span className="header-user-name">{currentUser.name}</span>
             <span className="header-user-role">{currentRole.toUpperCase()}</span>

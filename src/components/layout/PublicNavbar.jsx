@@ -164,11 +164,6 @@ export default function PublicNavbar() {
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                 aria-expanded={profileDropdownOpen}
               >
-                <img
-                  src={currentUser.avatar}
-                  alt={currentUser.name}
-                  className="profile-pill-avatar"
-                />
                 <span className="profile-pill-name">{(currentUser?.name || 'User').split(' ')[0]}</span>
                 <ChevronDown size={14} className={`chevron-icon ${profileDropdownOpen ? 'open' : ''}`} />
               </button>

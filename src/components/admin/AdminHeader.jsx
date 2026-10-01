@@ -126,7 +126,6 @@ export default function AdminHeader({ onOpenSearch, onToggleMobileNav }) {
 
         {/* User Profile (Static display across logins) */}
         <div className="admin-avatar-trigger admin-avatar-static" aria-disabled="true">
-          <img src={currentUser.avatar} alt={currentUser.name} className="admin-header-avatar" />
           <span className="admin-header-name">{currentUser.name.split(' ')[0]}</span>
         </div>
       </div>
